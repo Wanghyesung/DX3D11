@@ -1,0 +1,227 @@
+#include "pch.h"
+#include "TestLevel.h"
+
+#include <Engine\CLevelMgr.h>
+#include <Engine\CLevel.h>
+#include <Engine\CLayer.h>
+#include <Engine\CGameObject.h>
+#include <Engine\components.h>
+
+#include <Engine\CResMgr.h>
+#include <Engine\CCollisionMgr.h>
+
+#include <Script\CPlayerScript.h>
+#include <Script\CMonsterScript.h>
+#include <Script\CCameraMoveScript.h>
+
+#include "CLevelSaveLoad.h"
+
+#include <Engine\CCollisionMgr.h>
+#include <Engine/CSetColorShader.h>
+
+
+void CreateTestLevel()
+{
+	CCollisionMgr::GetInst()->LayerCheck((UINT)LAYER_TYPE::Player,(UINT)LAYER_TYPE::Default);
+	//return;
+
+	// 컴퓨트 쉐이더 테스트
+	Ptr<CTexture> pTestTexture =
+		CResMgr::GetInst()->CreateTexture(L"ComputeTestTex"
+			, 200, 200, DXGI_FORMAT_R8G8B8A8_UNORM
+			, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS
+			, D3D11_USAGE_DEFAULT);
+
+	Ptr<CSetColorShader> pCS = (CSetColorShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"SetColorCS").Get();
+	pCS->SetTargetTexture(pTestTexture);
+	pCS->SetColor(Vec3(1.f, 0.f, 1.f));
+	pCS->Execute();
+
+
+	//Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\BGM_Stage1.wav");
+	//pSound->Play(1, 0.5f, false);
+
+	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
+	pCurLevel->ChangeState(LEVEL_STATE::STOP);
+
+	// Layer 이름설정
+	pCurLevel->GetLayer(0)->SetName(L"Default");
+	pCurLevel->GetLayer(1)->SetName(L"Tile");
+	pCurLevel->GetLayer(2)->SetName(L"Player");
+	pCurLevel->GetLayer(3)->SetName(L"Monster");
+	pCurLevel->GetLayer(4)->SetName(L"PlayerProjectile");
+	pCurLevel->GetLayer(5)->SetName(L"MonsterProjectile");
+	pCurLevel->GetLayer(31)->SetName(L"ViewPort UI");
+
+	// 오브젝트 생성
+	CGameObject* pPlayer = new CGameObject;
+	pPlayer->SetName(L"Player");
+	pPlayer->AddComponent(new CTransform);
+	pPlayer->AddComponent(new CMeshRender);
+	pPlayer->AddComponent(new CPlayerScript);
+	pPlayer->AddComponent(new CRigidbody);
+	pPlayer->AddComponent(new CCollider3D);
+
+
+	pPlayer->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1000.f));
+	pPlayer->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
+
+	pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+	pPlayer->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
+	pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
+	//pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+	//pPlayer->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
+	//pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_CUBE_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\skybox\\SkyWater.dds"));
+
+	SpawnGameObject(pPlayer, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Player);
+
+	CGameObject* pPlayer2 = new CGameObject;
+	pPlayer2->SetName(L"Player2");
+	pPlayer2->AddComponent(new CTransform);
+	pPlayer2->AddComponent(new CMeshRender);
+	pPlayer2->AddComponent(new CCollider3D);
+
+	pPlayer2->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1000.f));
+	pPlayer2->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
+
+	pPlayer2->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+	pPlayer2->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pPlayer2->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
+	pPlayer2->MeshRender()->GetMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
+
+	SpawnGameObject(pPlayer2, Vec3(0.f, 0.f, 2000.f), (int)LAYER_TYPE::Default);
+	
+	// Main Camera Object 생성
+	CGameObject* pMainCam = new CGameObject;
+	pMainCam->SetName(L"MainCamera");
+
+	CCameraMoveScript* pCameraScript = new CCameraMoveScript();
+	pCameraScript->SetTarget(pPlayer); //카메라가 바라보는 물체 등록
+	pMainCam->AddComponent(pCameraScript);
+	pMainCam->AddComponent(new CTransform);
+	pMainCam->AddComponent(new CCamera);
+
+	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pMainCam->Camera()->SetCameraIndex((int)CAMERA_TYPE::MAIN);		// MainCamera 로 설정
+	pMainCam->Camera()->SetLayerMaskAll(true);	// 모든 레이어 체크
+	pMainCam->Camera()->SetLayerMask((int)LAYER_TYPE::UI, false);// UI Layer 는 렌더링하지 않는다.
+
+	SpawnGameObject(pMainCam, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Camera);
+
+	// UI cameara
+	CGameObject* pUICam = new CGameObject;
+	pUICam->SetName(L"UICamera");
+	pUICam->AddComponent(new CTransform);
+	pUICam->AddComponent(new CCamera);
+	
+	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+	pUICam->Camera()->SetCameraIndex((int)CAMERA_TYPE::UI);		// Sub 카메라로 지정
+	pUICam->Camera()->SetLayerMask((int)LAYER_TYPE::UI, true);	// 31번 레이어만 체크
+	
+	SpawnGameObject(pUICam, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Camera);
+
+	//skybox 추가
+	CGameObject* pSkyBox = new CGameObject();
+	pSkyBox->SetName(L"SkyBox");
+
+	pSkyBox->AddComponent(new CTransform);
+	pSkyBox->AddComponent(new CSkyBox);
+
+	pSkyBox->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 100));
+	pSkyBox->SkyBox()->SetSkyBoxType(SKYBOX_TYPE::CUBE);
+	pSkyBox->SkyBox()->SetSkyTexture(CResMgr::GetInst()->FindRes<CTexture>(L"texture\\skybox\\SkyWater.dds"));
+
+	SpawnGameObject(pSkyBox, Vec3(0.f, 0.f, 0.f), 0);
+
+	// 광원 추가
+	CGameObject* pLightObj = new CGameObject;
+	pLightObj->SetName(L"Directional Light");
+	
+	pLightObj->AddComponent(new CTransform);
+	pLightObj->AddComponent(new CLight3D);
+	
+	pLightObj->Transform()->SetRelativeRot(Vec3(XM_PI / 4.f, XM_PI / 4.f, 0.f));
+	pLightObj->Light3D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
+	pLightObj->Light3D()->SetLightColor(Vec3(0.6f, 0.6f, 0.6f));
+	pLightObj->Light3D()->SetLightAmbient(Vec3(0.15f, 0.15f, 0.15f));
+	
+	SpawnGameObject(pLightObj, Vec3(-500.f, -250.f, 0.f), 0);
+
+	//CGameObject* pLightObj = new CGameObject;
+	//pLightObj->SetName(L"Point Light 2");
+	//
+	//pLightObj->AddComponent(new CTransform);
+	//pLightObj->AddComponent(new CLight3D);
+	//
+	//pLightObj->Transform()->SetRelativeRot(Vec3(XM_PI / 4.f, XM_PI / 4.f, 0.f));
+	//pLightObj->Light3D()->SetLightType(LIGHT_TYPE::POINT);
+	//pLightObj->Light3D()->SetRadius(500.f);
+	//pLightObj->Light3D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	//pLightObj->Light3D()->SetLightAmbient(Vec3(0.f, 0.f, 0.f));
+
+	//SpawnGameObject(pLightObj, Vec3(250.f, -750.f, 0.f), 0);
+
+
+
+	CGameObject* pObject = new CGameObject;
+	pObject->SetName(L"Plane");
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+
+	pObject->Transform()->SetRelativeScale(Vec3(2000.f, 2000.f, 2000.f));
+	pObject->Transform()->SetRelativeRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
+
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
+	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
+
+	SpawnGameObject(pObject, Vec3(0.f, -1000.f, 0.f), L"Default");
+
+
+	//pObject = new CGameObject;
+	//pObject->SetName(L"Decal");
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CDecal);
+	//
+	//pObject->Transform()->SetRelativeScale(Vec3(200.f, 200.f, 200.f));
+	//pObject->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
+	//
+	//pObject->Decal()->SetDeferredDecal(true);
+	//pObject->Decal()->ActivateEmissive(true);
+	//
+	//SpawnGameObject(pObject, Vec3(0.f, 0.f, 500.f), L"Default");
+	
+	// 광원 추가 spotlight
+	//CGameObject* pLightObj = new CGameObject;
+	//pLightObj->SetName(L"Point Light 1");
+	//
+	//pLightObj->AddComponent(new CTransform);
+	//pLightObj->AddComponent(new CLight3D);
+	//
+	//pLightObj->Light3D()->SetLightType(LIGHT_TYPE::SPOT);
+	//pLightObj->Light3D()->SetLightColor(Vec3(1.f, 0.2f, 0.2f));
+	////pLightObj->Light3D()->SetLightAmbient(Vec3(1.f, 1.f, 1.f));
+	//pLightObj->Light3D()->SetAngle(XM_PI / 3.f);
+	//pLightObj->Light3D()->SetRadius(300.f);
+	//
+	//SpawnGameObject(pLightObj, Vec3(300.f, -400.f, 0.f), 0);
+
+	//pLightObj->Transform()->SetRelativeRot(Vec3(XM_PI / 4.f, XM_PI / 4.f, 0.f));
+	//pLightObj->Light3D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
+	//pLightObj->Light3D()->SetLightColor(Vec3(1.f, 1.f, 1.f));	
+	//pLightObj->Light3D()->SetLightAmbient(Vec3(0.15f, 0.15f, 0.15f));
+
+	//pLightObj->Light3D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
+	//pLightObj->Light3D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	//pLightObj->Light3D()->SetLightAmbient(Vec3(1.f, 1.f, 1.f));
+	//pLightObj->Light3D()->SetRadius(1000.f);
+	//pLightObj->Light3D()->SetLightAmbient(Vec3(1.f, 1.f, 1.f));
+	//SpawnGameObject(pLightObj, Vec3(-130.f, -130.f, 0.f), 0);
+
+
+
+	
+	
+}
