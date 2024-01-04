@@ -550,5 +550,8 @@
     <FxCompile Include="light.fx">
       <Filter>Source\08. ShaderCode</Filter>
     </FxCompile>
+    <FxCompile Include="motionblur.fx">
+      <Filter>Source\08. ShaderCode</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

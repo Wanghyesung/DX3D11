@@ -686,7 +686,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 
 	pShader->SetRSType(RS_TYPE::CULL_FRONT);
 	pShader->SetDSType(DS_TYPE::LESS_EQUAL);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED);
 
 	//parameter
 	pShader->AddTexParam(TEX_0, "Output Texture");
@@ -856,7 +856,17 @@ void CResMgr::CreateDefaultGraphicsShader()
 	AddRes(pShader->GetKey(), pShader);
 
 
+	pShader = new CGraphicsShader;
+	pShader->SetKey(L"MotionBlurShader");
+	
+	pShader->CreateVertexShader(L"shader\\motionblur.fx", "VS_Motion_Blur");
+	pShader->CreatePixelShader(L"shader\\motionblur.fx", "PS_Motion_Blur");
 
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::LESS_EQUAL);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_BLUR);
+
+	AddRes(pShader->GetKey(), pShader);
 }
 
 void CResMgr::CreateDefaultComputeShader()
@@ -985,4 +995,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"ShadowMapShader"));
 	AddRes(L"ShadowMapMtrl", pMtrl);
+
+	//  MotionblurMtrl
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"MotionBlurShader"));
+	AddRes(L"MotionBlurMtrl", pMtrl);
+
 }

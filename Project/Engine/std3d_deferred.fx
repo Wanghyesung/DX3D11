@@ -82,32 +82,32 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in)
         //output.vDiffuse.a = 1.f;
     }
     
-    if (g_btex_1)
-    {
-
-        float3 vNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;
-        
-        // 0 ~ 1 범위의 값을 -1 ~ 1 로 확장        
-        vNormal = vNormal * 2.f - 1.f;
-        
-        float3x3 vRotateMat =
-        {
-            _in.vViewTangent,
-            -_in.vViewBinormal,
-            _in.vViewNormal        
-        };
-        
-        vViewNormal = normalize(mul(vNormal, vRotateMat));
-    }
+    //if (g_btex_1)
+    //{
+    //
+    //    float3 vNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;
+    //    
+    //    // 0 ~ 1 범위의 값을 -1 ~ 1 로 확장        
+    //    vNormal = vNormal * 2.f - 1.f;
+    //    
+    //    float3x3 vRotateMat =
+    //    {
+    //        _in.vViewTangent,
+    //        -_in.vViewBinormal,
+    //        _in.vViewNormal        
+    //    };
+    //    
+    //    vViewNormal = normalize(mul(vNormal, vRotateMat));
+    //}
     
     output.vNormal = float4(vViewNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
     
     //1번째 속성에 빛을 받을지 안받을지 결정
     output.vData = float4(1.f, 0.f, 0.f, 1.f);
-    if (!bActiveColor)
+    if (bActiveColor)
     {
-        output.vData.x = 0.f;
+        output.vData.x = 1.f;
     }
    
     //재질계수

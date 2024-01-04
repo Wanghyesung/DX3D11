@@ -45,6 +45,7 @@ public:
     void RegisterEditorCamera(CCamera* _Cam) { m_pEditorCam = _Cam; }
     CGameObject* GetCamera(CAMERA_TYPE _eType);
 
+
     void SetRenderFunc(bool _IsPlay);
     UINT RegisterLight2D(CLight2D* _Light2D, const tLightInfo& _Info) 
     {
@@ -58,6 +59,8 @@ public:
         m_vecLight3DInfo.push_back(_Info); 
         return m_vecLight3D.size() - 1;
     }
+
+    
     void ClearCamera() { m_vecCam.clear(); }
 
     void AddDebugShapeInfo(const tDebugShapeInfo& _info) { m_vecShapeInfo.push_back(_info); }
@@ -65,7 +68,6 @@ public:
 
     const vector<CLight2D*>& GetLight2D() { return m_vecLight2D; }
     const vector<CLight3D*>& GetLight3D() { return m_vecLight3D; }
-
 
     CCamera* GetMainCam() 
     { 

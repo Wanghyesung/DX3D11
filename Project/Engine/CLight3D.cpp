@@ -13,14 +13,16 @@ CLight3D::CLight3D()
 	m_LightIdx(-1),
 	m_pCamObj(nullptr)
 {
-	SetLightType(LIGHT_TYPE::DIRECTIONAL);
-
+	
 	m_pCamObj = new CGameObject;
 	m_pCamObj->AddComponent(new CTransform);
 	m_pCamObj->AddComponent(new CCamera);
 
 	m_pCamObj->Camera()->SetLayerMaskAll(true);
 	m_pCamObj->Camera()->SetLayerMask(31, false);
+
+	SetLightType(LIGHT_TYPE::DIRECTIONAL);
+
 }
 
 CLight3D::CLight3D(const CLight3D& _Origin)
@@ -71,6 +73,14 @@ void CLight3D::render()
 
 	//light 재질 업데이트
 	m_Mtrl->SetScalarParam(INT_0, &m_LightIdx);
+
+	if (m_LightInfo.LightType == (UINT)LIGHT_TYPE::DIRECTIONAL)
+	{
+		Matrix matVP = m_pCamObj->Camera()->GetViewMat() * m_pCamObj->Camera()->GetProjMat();
+		m_Mtrl->SetScalarParam(MAT_0, &matVP);
+		m_Mtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"DynamicShadowMapTex"));
+	}
+
 	m_Mtrl->UpdateData();
 
 	m_Mesh->render();
@@ -100,6 +110,11 @@ void CLight3D::SetLightType(LIGHT_TYPE _type)
 		//광원을 렌더링할 때, 광원의 영향범위를 형상화 할 수 있는 메쉬(볼륨메쉬)를 선택
 		m_Mesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"); //내 렌더타겟 전체를 범위로
 		m_Mtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DirLightMtrl");
+
+		m_pCamObj->Camera()->SetFar(100000.f);
+		m_pCamObj->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+		m_pCamObj->Camera()->SetOrthoWidth(4000.f);
+		m_pCamObj->Camera()->SetOrthoHeight(4000.f);
 	}
 
 	else if (LIGHT_TYPE::POINT == (LIGHT_TYPE)m_LightInfo.LightType)
@@ -107,6 +122,7 @@ void CLight3D::SetLightType(LIGHT_TYPE _type)
 		//내 구 범위를 범위로
 		m_Mesh = CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh");
 		m_Mtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"PointLightMtrl");
+
 	}
 
 	else
@@ -123,7 +139,7 @@ void CLight3D::SetLightType(LIGHT_TYPE _type)
 		m_Mtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
 
 		//속성 1번 빛을 받을지 결정하는 불값
-		m_Mtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"DataTargetTex"));
+		m_Mtrl->SetTexParam(TEX_6, CResMgr::GetInst()->FindRes<CTexture>(L"DataTargetTex"));
 	}
 
 }

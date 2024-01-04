@@ -18,6 +18,7 @@ class CTileMap;
 class CScript;
 class CDecal;
 class CSkyBox;
+class CMotionBlur;
 
 #define GET_COMPONENT(Type, TYPE) C##Type* Type() const { return (C##Type*)m_arrCom[(UINT)COMPONENT_TYPE::TYPE]; }
 
@@ -68,6 +69,7 @@ public:
     GET_COMPONENT(MeshRender, MESHRENDER);
     GET_COMPONENT(ParticleSystem, PARTICLESYSTEM);
     GET_COMPONENT(Rigidbody, RIGIDBODY);
+    GET_COMPONENT(MotionBlur, MOTIONBLUR);
     GET_COMPONENT(Camera, CAMERA);
     GET_COMPONENT(Collider2D, COLLIDER2D);
     GET_COMPONENT(Collider3D, COLLIDER3D);

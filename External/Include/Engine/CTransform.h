@@ -6,8 +6,10 @@ class CTransform :
 {
 private:
     Vec3    m_vRelativePos;
+    Vec3    m_vPrevRelativePos;
     Vec3    m_vRelativeScale;
     Vec3    m_vRelativeRot;
+
 
     bool    m_bAbsolute;    // 상대 이동, 크기를 절대값으로 지정    
 
@@ -15,17 +17,23 @@ private:
     Vec3    m_vWorldDir[3];
 
     Matrix  m_matWorldScale;    // 월드 크기 행렬
+    Matrix  m_matRot; // 내 회전행렬
     Matrix  m_matWorld; // 크기, 회전, 이동 정보를 합쳐놓음
     Matrix  m_matWorldInv;
+    Matrix  m_matPrevWorld; //이전프레임 월드 행렬
 
-    Matrix  m_matRot; // 내 회전행렬
+  
 
     Vec3 m_vUp;
     Vec3 m_vFoward;
     Vec3 m_vRight;
 
 public:
-    void SetRelativePos(Vec3 _vPos) { m_vRelativePos = _vPos; }
+    void SetRelativePos(Vec3 _vPos) 
+    {
+        m_vPrevRelativePos = m_vRelativePos;
+        m_vRelativePos = _vPos; 
+    }
     void SetRelativeScale(Vec3 _vScale) { m_vRelativeScale = _vScale; }
     void SetRelativeRot(Vec3 _vRot){ m_vRelativeRot = _vRot; }
 
@@ -41,6 +49,7 @@ public:
     void SetAbsolute(bool _Set) { m_bAbsolute = _Set; }    
 
     Vec3 GetRelativePos() const { return m_vRelativePos; }
+    Vec3 GetPrveRelativePos() const { return m_vPrevRelativePos; }
     Vec3 GetRelativeScale() const { return m_vRelativeScale; }
     Vec3 GetRelativeRot() const { return m_vRelativeRot; }
 

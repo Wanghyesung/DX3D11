@@ -10,12 +10,15 @@ cbuffer TRANSFORM : register(b0)
     //b0 : gpu가 사용할 수 있게 상수레지스터에 바인딩을 해둠
     row_major matrix g_matWorld;
     row_major matrix g_matWorldInv;
+    row_major Matrix g_matPrevWorld;
     
     row_major matrix g_matView;
     row_major matrix g_matViewInv;
+    row_major Matrix g_matPrevView;
     
     row_major matrix g_matProj;
     row_major matrix g_matProjInv;
+    row_major Matrix g_matPrevProj;
     
     //Inv 역행렬
     
@@ -45,10 +48,10 @@ cbuffer MATERIAL : register(b1)
     float4 g_vec4_2;
     float4 g_vec4_3;
     
-    matrix g_mat_0;
-    matrix g_mat_1;
-    matrix g_mat_2;
-    matrix g_mat_3;
+    row_major matrix g_mat_0;
+    row_major matrix g_mat_1;
+    row_major matrix g_mat_2;
+    row_major matrix g_mat_3;
     
     int g_btex_0;
     int g_btex_1;

@@ -47,11 +47,13 @@ enum class LEVEL_TYPE
 enum class COMPONENT_TYPE
 {
 	// update
+	
 	TRANSFORM,		// 위치, 크기, 회전
 	COLLIDER2D,		// 2차원 충돌
 	COLLIDER3D,		// 3차원 충돌
 
 	RIGIDBODY,		// 힘을받는 강체
+	MOTIONBLUR,		// 흔들림 효과 이전 프레임 위치 정보 저장
 	ANIMATOR2D,		// Sprite Animation
 	ANIMATOR3D,		// Bone Sknning Animation
 	LIGHT2D,		// 2차원 광원
@@ -65,7 +67,6 @@ enum class COMPONENT_TYPE
 	LANDSCAPE,		// 3차원 지형
 	SKYBOX,			// 스카이 박스
 	DECAL,			// 내부 렌더링
-	MOTIONBLUR,		// 흔들림 효과
 		
 	END,
 
@@ -224,6 +225,7 @@ enum class SHADER_DOMAIN
 	DOMAIN_OPAQUE,		// 불투명 오브젝트
 	DOMAIN_MASK,		// 불투명, 투명
 	DOMAIN_DECAL,
+	DOMAIN_BLUR,		//블러 처리
 	DOMAIN_TRANSPARENT,	// 반투명
 	DOMAIN_POSTPROCESS, // 후 처리
 	DOMAIN_UI,
@@ -313,6 +315,8 @@ enum class MRT_TYPE
 	DEFERRED,
 
 	DATA,
+
+	BOTION_BLUER,
 
 	DEFERRED_DECAL,
 

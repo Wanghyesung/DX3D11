@@ -177,17 +177,22 @@ struct tTransform
 {
 	Matrix matWorld; 
 	Matrix matWorldInv;
+	Matrix matPrevWorld; //이전프레임 월드행렬
 
 	Matrix matView;
 	Matrix matViewInv;
+	Matrix matPrevView; //이전프레임 월드행렬
 
 	Matrix matProj;
 	Matrix matProjInv;
+	Matrix matPrevProj; //이전프레임 월드행렬
 
 	//inv역행렬
 
 	Matrix matWV;//view까지만 구한 행렬
 	Matrix matWVP;//투영까지 구한 행렬
+
+	
 };
 
 extern tTransform g_transform;

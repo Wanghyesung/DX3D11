@@ -54,7 +54,7 @@ CGameObject::CGameObject(const CGameObject& _Other)
 	for (size_t i = 0; i < _Other.m_vecChild.size(); ++i)
 	{
 		AddChild(_Other.m_vecChild[i]->Clone());
-	}	
+	}
 }
 
 CGameObject::~CGameObject()
@@ -124,9 +124,9 @@ void CGameObject::finaltick()
 	{
 		m_vecChild[i]->finaltick();
 	}
-		
+
 	// 소속 레이어가 없는데 finaltick 이 호출되었다.
-	assert(-1 != m_iLayerIdx); 
+	assert(-1 != m_iLayerIdx);
 
 	// 레이어 등록
 	CLayer* pCurLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(m_iLayerIdx);
@@ -135,7 +135,6 @@ void CGameObject::finaltick()
 
 void CGameObject::finaltick_module()
 {
-	//컴포넌트에서 모듈로 들고있는 오브젝트 업데이트
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::SCRIPT; ++i)
 	{
 		if (nullptr != m_arrCom[i])
@@ -147,7 +146,6 @@ void CGameObject::finaltick_module()
 		m_vecChild[i]->finaltick_module();
 	}
 }
-
 
 void CGameObject::render()
 {
@@ -173,7 +171,7 @@ void CGameObject::AddComponent(CComponent* _Component)
 
 	// 스크립트를 제외한 일반 컴포넌트인 경우
 	else
-	{		
+	{
 		// 이미 보유하고 있는 컴포넌트인 경우
 		assert(!m_arrCom[(UINT)_Component->GetType()]);
 
@@ -197,13 +195,13 @@ void CGameObject::AddChild(CGameObject* _Object)
 		// 기존 부모가 있으면 연결 해제 후 연결
 		_Object->DisconnectFromParent();
 	}
-	
+
 	else
 	{
 		// 기존 부모가 없으면, 소속 레이어에서 최상위부모 목록에서 제거된 후 연결
 		_Object->ChangeToChildType();
 	}
-	
+
 
 	// 부모 자식 연결
 	_Object->m_Parent = this;

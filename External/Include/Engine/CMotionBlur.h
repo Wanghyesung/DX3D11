@@ -4,20 +4,16 @@
 class CMotionBlur : public CComponent
 {
 private:
-	Vec3 m_vStartPos;
-	Vec3 m_vEndPos;
+	float m_fPosCheckTime;
+	float m_fCurCheckTime;
 
-	float m_fSpawnTime;
-	float m_fCurTime;
-
+	//일정시간 쉐이더를 호출할 위치
+	Vec3 m_vCheckPos;
+	//내가 오브젝트의 크기만큼 mesh를 늘림
+	CGameObject* m_pMotionBlur;
 private:
-	void create_mesh(float _fLocalScale);
-
-public:
-	void render();
+	void create_mesh();
 	
-	void Draw(float _fLocalScale, Vec3 _vPostion, Vec3 _vScale, Vec3 _vRotate);
-
 public:
 	CMotionBlur();
 	~CMotionBlur();

@@ -15,22 +15,19 @@
 CRenderMgr::CRenderMgr()
     : m_Light2DBuffer(nullptr)
     , RENDER_FUNC(nullptr)
-    , m_pEditorCam(nullptr),
-    m_MRT{}
+    , m_pEditorCam(nullptr)
+    , m_MRT{}
 {
-    //1 maincam;
-    //2 uicam
-    m_vecCam.resize((UINT)CAMERA_TYPE::END);
-
     Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
     m_RTCopyTex = CResMgr::GetInst()->CreateTexture(L"RTCopyTex"
-                                                    , (UINT)vResolution.x, (UINT)vResolution.y
-                                                    , DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE
-                                                    , D3D11_USAGE_DEFAULT);
+        , (UINT)vResolution.x, (UINT)vResolution.y
+        , DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE
+        , D3D11_USAGE_DEFAULT);
 
     CResMgr::GetInst()->FindRes<CMaterial>(L"GrayMtrl")->SetTexParam(TEX_0, m_RTCopyTex);
 
     CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl")->SetTexParam(TEX_0, m_RTCopyTex);
+
 }
 
 CRenderMgr::~CRenderMgr()
@@ -44,64 +41,29 @@ CRenderMgr::~CRenderMgr()
     DeleteArray(m_MRT);
 }
 
-
-//void CRenderMgr::init()
-//{
-//    // Light2DBuffer 구조화 버퍼 생성
-//    m_Light2DBuffer = new CStructuredBuffer;
-//    m_Light2DBuffer->Create(sizeof(tLightInfo), 10, SB_TYPE::READ_ONLY, true);
-//
-//    m_Light3DBuffer = new CStructuredBuffer;
-//    m_Light3DBuffer->Create(sizeof(tLightInfo), 10, SB_TYPE::READ_ONLY, true);
-//}
-
 void CRenderMgr::render()
 {
-    // 렌더링 시작
-    //float arrColor[4] = { 0.2f, 0.2f, 0.2f, 1.f };
-    ////CDevice::GetInst()->ClearTarget(arrColor);
-    //m_MRT[(UINT)MRT_TYPE::SWAPCHAIN]->ClearTarget();
-    //
-    //// 출력 타겟 지정    
-    ////CDevice::GetInst()->OMSet();
-    //m_MRT[(UINT)MRT_TYPE::SWAPCHAIN]->OMSet();
-    //-->스왑체인용 렌더타겟만 에 바로 그리지말고 forword?
-    //-->렌더타켓을 분산시켜서 그림을 그릴거임 deffered
-
-
     // 광원 및 전역 데이터 업데이트 및 바인딩
     UpdateData();
 
+    // MRT Clear    
     ClearMRT();
 
+    // Dynamic ShadowMap
     //render_shadowmap();
 
     // 렌더 함수 호출
     (this->*RENDER_FUNC)();
-    
+
     // 광원 해제
     Clear();
 }
 
 
-void CRenderMgr::render_shadowmap()
-{
-    //ShadowMap MRT로 교체
-    GetMRT(MRT_TYPE::SHADOWMAP)->OMSet();
-
-    for (int i = 0; i < m_vecLight3D.size(); ++i)
-    {
-        m_vecLight3D[i]->render_shadowmap();
-    }
-    
-}
-
 void CRenderMgr::render_play()
 {
-    ClearMRT();//////////////////////
-
     // 카메라 기준 렌더링
-    for (size_t i = 0; i <m_vecCam.size(); ++i)
+    for (size_t i = 0; i < m_vecCam.size(); ++i)
     {
         if (nullptr == m_vecCam[i])
             continue;
@@ -119,15 +81,14 @@ void CRenderMgr::render_play()
 
 void CRenderMgr::render_editor()
 {
-    //mrt clear
-    ClearMRT();
 
-    //물체 분류
+
+    // 물체 분류
     m_pEditorCam->SortObject();
 
-    //출력타겟 지정
+    // 출력 타겟 지정    
     m_MRT[(UINT)MRT_TYPE::SWAPCHAIN]->OMSet();
-    m_pEditorCam->render();    
+    m_pEditorCam->render();
 }
 
 
@@ -138,19 +99,19 @@ int CRenderMgr::RegisterCamera(CCamera* _Cam, int _idx)
         m_vecCam.resize(_idx + 1);
     }
 
-    m_vecCam[_idx] = _Cam;    
+    m_vecCam[_idx] = _Cam;
     return _idx;
 }
 
 CGameObject* CRenderMgr::GetCamera(CAMERA_TYPE _eType)
 {
-    //0번 메인 카메라
-    return m_vecCam[(int)_eType]->GetOwner();
+
+    return nullptr;
 }
 
 void CRenderMgr::SetRenderFunc(bool _IsPlay)
 {
-    if(_IsPlay)
+    if (_IsPlay)
         RENDER_FUNC = &CRenderMgr::render_play;
     else
         RENDER_FUNC = &CRenderMgr::render_editor;
@@ -164,7 +125,6 @@ void CRenderMgr::CopyRenderTarget()
 
 void CRenderMgr::UpdateData()
 {
-   
     // 구조화버퍼의 크기가 모자라면 더 크게 새로 만든다.
     if (m_Light2DBuffer->GetElementCount() < m_vecLight2DInfo.size())
     {
@@ -196,6 +156,17 @@ void CRenderMgr::UpdateData()
     pGlobalBuffer->UpdateData_CS();
 }
 
+void CRenderMgr::render_shadowmap()
+{
+    // ShadowMap MRT 로 교체
+    GetMRT(MRT_TYPE::SHADOWMAP)->OMSet();
+
+    for (size_t i = 0; i < m_vecLight3D.size(); ++i)
+    {
+        m_vecLight3D[i]->render_shadowmap();
+    }
+}
+
 
 void CRenderMgr::Clear()
 {
@@ -204,4 +175,3 @@ void CRenderMgr::Clear()
     m_vecLight3D.clear();
     m_vecLight3DInfo.clear();
 }
-

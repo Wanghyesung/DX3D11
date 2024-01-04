@@ -41,6 +41,9 @@ Vec3 CTransform::GetNewFoward()
 
 void CTransform::finaltick()
 {
+	//이전프레임 월드행렬 저장
+	m_matPrevWorld = m_matWorld;
+
 	//크기
 	m_matWorldScale = XMMatrixIdentity();
 	m_matWorldScale = XMMatrixScaling(m_vRelativeScale.x, m_vRelativeScale.y, m_vRelativeScale.z);
@@ -111,8 +114,11 @@ void CTransform::UpdateData()
 	g_transform.matWorld = m_matWorld;
 	g_transform.matWorldInv = m_matWorldInv;
 
+	g_transform.matPrevWorld = m_matPrevWorld;
+
 	g_transform.matWV = g_transform.matWorld * g_transform.matView;
 	g_transform.matWVP = g_transform.matWV * g_transform.matProj;
+	
 
 	pTransformBuffer->SetData(&g_transform);
 	pTransformBuffer->UpdateData();

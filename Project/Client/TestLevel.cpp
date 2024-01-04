@@ -60,13 +60,14 @@ void CreateTestLevel()
 	pPlayer->AddComponent(new CMeshRender);
 	pPlayer->AddComponent(new CPlayerScript);
 	pPlayer->AddComponent(new CRigidbody);
-	pPlayer->AddComponent(new CCollider3D);
-
+	//pPlayer->AddComponent(new CCollider3D);
+	pPlayer->AddComponent(new CMotionBlur);
 
 	pPlayer->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1000.f));
 	pPlayer->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 
-	pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+	//SphereMesh
+	pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pPlayer->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
 	pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
 	pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
@@ -75,22 +76,6 @@ void CreateTestLevel()
 	//pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_CUBE_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\skybox\\SkyWater.dds"));
 
 	SpawnGameObject(pPlayer, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Player);
-
-	CGameObject* pPlayer2 = new CGameObject;
-	pPlayer2->SetName(L"Player2");
-	pPlayer2->AddComponent(new CTransform);
-	pPlayer2->AddComponent(new CMeshRender);
-	pPlayer2->AddComponent(new CCollider3D);
-
-	pPlayer2->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1000.f));
-	pPlayer2->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
-
-	pPlayer2->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
-	pPlayer2->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pPlayer2->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
-	pPlayer2->MeshRender()->GetMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
-
-	SpawnGameObject(pPlayer2, Vec3(0.f, 0.f, 2000.f), (int)LAYER_TYPE::Default);
 	
 	// Main Camera Object »ý¼º
 	CGameObject* pMainCam = new CGameObject;
@@ -143,12 +128,10 @@ void CreateTestLevel()
 	
 	pLightObj->Transform()->SetRelativeRot(Vec3(XM_PI / 4.f, XM_PI / 4.f, 0.f));
 	pLightObj->Light3D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
-	pLightObj->Light3D()->SetLightColor(Vec3(0.6f, 0.6f, 0.6f));
-	pLightObj->Light3D()->SetLightAmbient(Vec3(0.15f, 0.15f, 0.15f));
+	pLightObj->Light3D()->SetLightColor(Vec3(0.7f, 0.7f, 0.7f));
+	pLightObj->Light3D()->SetLightAmbient(Vec3(0.3f, 0.3f, 0.3f));
 	
-	SpawnGameObject(pLightObj, Vec3(-500.f, -250.f, 0.f), 0);
-
-	//CGameObject* pLightObj = new CGameObject;
+	SpawnGameObject(pLightObj, Vec3(-2000, 2000.f, -2000.f), 0);
 	//pLightObj->SetName(L"Point Light 2");
 	//
 	//pLightObj->AddComponent(new CTransform);
@@ -169,7 +152,7 @@ void CreateTestLevel()
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 
-	pObject->Transform()->SetRelativeScale(Vec3(2000.f, 2000.f, 2000.f));
+	pObject->Transform()->SetRelativeScale(Vec3(8000.f, 8000.f, 8000.f));
 	pObject->Transform()->SetRelativeRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));

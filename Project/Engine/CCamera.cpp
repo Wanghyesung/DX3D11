@@ -6,6 +6,7 @@
 #include "CRenderMgr.h"
 #include "CTransform.h"
 #include "CLight3D.h"
+#include "CMotionBlur.h"
 
 #include "CLevelMgr.h"
 #include "CLevel.h"
@@ -27,7 +28,10 @@ CCamera::CCamera()
 	, m_Frustum(this)
 	, m_fAspectRatio(1.f)
 	, m_fScale(1.f)
-	, m_fFar(10000.f)
+	, m_Far(10000.f)
+	, m_FOV(XM_PI / 2.f)
+	, m_OrthoWidth(0.f)
+	, m_OrthoHeight(0.f)
 	, m_ProjType(PROJ_TYPE::ORTHOGRAPHIC)
 	, m_iLayerMask(0)
 	, m_iCamIdx(-1)
@@ -36,6 +40,9 @@ CCamera::CCamera()
 
 	Vec2 vRenderResol = CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio = vRenderResol.x / vRenderResol.y;
+
+	m_OrthoWidth = vRenderResol.x;
+	m_OrthoHeight = vRenderResol.y;
 }
 
 CCamera::CCamera(const CCamera& _Other)
@@ -43,6 +50,9 @@ CCamera::CCamera(const CCamera& _Other)
 	, m_Frustum(this)
 	, m_fAspectRatio(_Other.m_fAspectRatio)
 	, m_fScale(_Other.m_fScale)
+	, m_FOV(_Other.m_FOV)
+	, m_OrthoWidth(_Other.m_OrthoWidth)
+	, m_OrthoHeight(_Other.m_OrthoHeight)
 	, m_ProjType(_Other.m_ProjType)
 	, m_iLayerMask(_Other.m_iLayerMask)
 	, m_iCamIdx(-1)
@@ -75,6 +85,8 @@ void CCamera::CalcViewMat()
 	// ==============
 	// View 행렬 계산
 	// ==============
+	m_matPrevView = m_matView;
+
 	m_matView = XMMatrixIdentity();
 
 	// 카메라 좌표를 원점으로 이동
@@ -101,6 +113,8 @@ void CCamera::CalcViewMat()
 
 void CCamera::CalcProjMat()
 {
+	m_matPrevProj = m_matProj;
+
 	// =============
 	// 투영 행렬 계산
 	// =============
@@ -110,12 +124,12 @@ void CCamera::CalcProjMat()
 	{
 		// 직교 투영
 		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-		m_matProj = XMMatrixOrthographicLH(vResolution.x * (1.f / m_fScale), vResolution.y * (1.f / m_fScale), 1.f, 10000.f);
+		m_matProj = XMMatrixOrthographicLH(m_OrthoWidth* (1.f / m_fScale), m_OrthoHeight * (1.f / m_fScale), 1.f, 10000.f);
 	}
 	else
 	{
 		// 원근 투영
-		m_matProj = XMMatrixPerspectiveFovLH(XM_PI / 2.f, m_fAspectRatio, 1.f, m_fFar);
+		m_matProj = XMMatrixPerspectiveFovLH(m_FOV, m_fAspectRatio, 1.f, m_Far);
 	}
 
 	// 투영행렬 역행렬 구하기
@@ -152,7 +166,10 @@ void CCamera::SetCameraIndex(int _idx)
 
 void CCamera::InitMatrix()
 {
-	// 행렬 업데이트
+	//이전 행렬
+	g_transform.matPrevView = m_matPrevView;
+	g_transform.matPrevProj = m_matPrevProj;
+
 	g_transform.matView = m_matView;
 	g_transform.matViewInv = m_matViewInv;
 
@@ -202,6 +219,9 @@ void CCamera::SortObject()
 				case SHADER_DOMAIN::DOMAIN_DEFERRED_DECAL:
 					m_vecDeferredDecal.push_back(vecObject[j]);
 					break;
+				case SHADER_DOMAIN::DOMAIN_BLUR:
+					m_vecBlur.push_back(vecObject[j]);
+					break;
 				case SHADER_DOMAIN::DOMAIN_OPAQUE:
 					m_vecOpaque.push_back(vecObject[j]);
 					break;
@@ -227,79 +247,6 @@ void CCamera::SortObject()
 }
 
 void CCamera::SortObject_Shadow()
-{
-	//광원에있는 카메라 기준으로 행렬 재계산
-	g_transform.matView = m_matView;
-	g_transform.matProj = m_matProj;
-
-	for (int i = 0; i < m_vecShadow.size(); ++i)
-	{
-		m_vecShadow[i]->render();
-	}
-}
-
-void CCamera::render()
-{
-	InitMatrix();
-
-	// 쉐이더 도메인에 따라서 순차적으로 그리기
-	// Deferred MRT 로 변경
-	// Deferred 물체들을 Deferred MRT 에 그리기
-	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::DEFERRED)->OMSet(true);
-	render_deferred();
-
-
-
-	// Light MRT 로 변경
-	// Deferred 물체에 광원 적용시키기
-	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::LIGHT)->OMSet(false);
-
-	const vector<CLight3D*>& vecLight3D = CRenderMgr::GetInst()->GetLight3D();
-	for (int i = 0; i < vecLight3D.size(); ++i)
-	{
-		vecLight3D[i]->render();
-	}
-
-	
-	// Deferred MRT 에 그린 물체에 Light MRT 출력한 광원과 합쳐서
-	// 다시 SwapChain 타겟으로 으로 그리기
-	// SwapChain MRT 로 변경
-	// 오브젝트 없이 강제로 렌더링되기 위해서 mesh와 material을 가져와서 렌더링
-
-	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
-	if (m_iCamIdx != (int)CAMERA_TYPE::UI)
-	{
-		static Ptr<CMesh> pRectMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
-		static Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"MergeMtrl");
-
-		static bool bSet = false;
-		if (!bSet)
-		{
-			bSet = true;
-			pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"ColorTargetTex"));
-			pMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex"));
-			pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"SpecularTargetTex"));
-			pMtrl->SetTexParam(TEX_3, CResMgr::GetInst()->FindRes<CTexture>(L"EmissiveTargetTex"));
-		}
-		pMtrl->UpdateData();
-		pRectMesh->render();
-	}
-	// Forward Rendering
-	// SwapChain MRT 로 변경
-	
-	render_opaque();
-	render_mask();
-	render_decal();
-	render_transparent();
-
-	// PostProcess - 후처리
-	render_postprocess();
-
-	// UI
-	render_ui();
-}
-
-void CCamera::render_shadowmap()
 {
 	clear_shadow();
 
@@ -332,11 +279,93 @@ void CCamera::render_shadowmap()
 	}
 }
 
+void CCamera::render()
+{
+	InitMatrix();
+
+	// 쉐이더 도메인에 따라서 순차적으로 그리기
+	// Deferred MRT 로 변경
+	// Deferred 물체들을 Deferred MRT 에 그리기
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::DEFERRED)->OMSet(true);
+	render_deferred();
+
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::BOTION_BLUER)->OMSet(true);
+	render_blur();
+
+	// Light MRT 로 변경
+	// Deferred 물체에 광원 적용시키기
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::LIGHT)->OMSet(false);
+
+	const vector<CLight3D*>& vecLight3D = CRenderMgr::GetInst()->GetLight3D();
+	for (int i = 0; i < vecLight3D.size(); ++i)
+	{
+		vecLight3D[i]->render();
+	}
+
+	
+	// Deferred MRT 에 그린 물체에 Light MRT 출력한 광원과 합쳐서
+	// 다시 SwapChain 타겟으로 으로 그리기
+	// SwapChain MRT 로 변경
+	// 오브젝트 없이 강제로 렌더링되기 위해서 mesh와 material을 가져와서 렌더링
+
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
+	if (m_iCamIdx != (int)CAMERA_TYPE::UI)
+	{
+		static Ptr<CMesh> pRectMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+		static Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"MergeMtrl");
+
+		static bool bSet = false;
+		if (!bSet)
+		{
+			bSet = true;
+			pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"ColorTargetTex"));
+			pMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex"));
+			pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"SpecularTargetTex"));
+			pMtrl->SetTexParam(TEX_3, CResMgr::GetInst()->FindRes<CTexture>(L"EmissiveTargetTex"));
+			pMtrl->SetTexParam(TEX_4, CResMgr::GetInst()->FindRes<CTexture>(L"ShadowTargetTex"));
+
+			pMtrl->SetTexParam(TEX_7, CResMgr::GetInst()->FindRes<CTexture>(L"VelocityTex"));
+		}
+		pMtrl->UpdateData();
+		pRectMesh->render();
+	}
+	// Forward Rendering
+	// SwapChain MRT 로 변경
+	
+
+	//여기서 색처리
+	render_opaque();
+	render_mask();
+	render_decal();
+	render_transparent();
+
+	// PostProcess - 후처리
+	render_postprocess();
+
+	// UI
+	render_ui();
+
+	//CRenderMgr::GetInst()->CopyRenderTarget();
+}
+
+void CCamera::render_shadowmap()
+{
+	//광원에있는 카메라 기준으로 행렬 재계산
+	g_transform.matView = m_matView;
+	g_transform.matProj = m_matProj;
+
+	for (int i = 0; i < m_vecShadow.size(); ++i)
+	{
+		m_vecShadow[i]->render_shadowmap();
+	}
+}
+
 
 void CCamera::clear()
 {
 	m_vecDeferred.clear();
 	m_vecDeferredDecal.clear();
+	m_vecBlur.clear();
 
 	m_vecOpaque.clear();
 	m_vecMask.clear();
@@ -364,6 +393,15 @@ void CCamera::render_deferred()
 	for (size_t i = 0; i < m_vecDeferredDecal.size(); ++i)
 	{
 		m_vecDeferredDecal[i]->render();
+	}
+}
+
+
+void CCamera::render_blur()
+{
+	for (size_t i = 0; i < m_vecBlur.size(); ++i)
+	{
+		m_vecBlur[i]->render();
 	}
 }
 
