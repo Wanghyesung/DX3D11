@@ -24,6 +24,8 @@ struct VS_OUT
     float3 vViewNormal : NORMAL;
     float3 vViewTangent : TANGENT;
     float3 vViewBinormal : BINORMAL;
+    
+    float vDepth : DEPTH;
 };
 
 // ===============
@@ -53,7 +55,9 @@ VS_OUT VS_Std3D_Deferred(VS_IN _in)
                
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
     output.vUV = _in.vUV;
-      
+    
+    output.vDepth = output.vPosition.z / output.vPosition.w;
+    //깊이
     return output;
 }
 
@@ -65,6 +69,9 @@ struct PS_OUT
     float4 vPosition : SV_Target2;
     float vEmissive : SV_Target3;
     float4 vData : SV_Target4;
+    //vData.x = 빛의 영향을 받을지
+    //vData.y = 깊이값 체크
+    
 };
 
 PS_OUT PS_Std3D_Deferred(VS_OUT _in)
@@ -109,6 +116,7 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in)
     {
         output.vData.x = 1.f;
     }
+    output.vData.y = _in.vDepth;
    
     //재질계수
     output.vColor.a = saturate(SpecCoeff);

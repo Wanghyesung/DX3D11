@@ -62,7 +62,7 @@ float4 PS_SkyBoxShader(VS_SKY_OUT _in) : SV_Target
         }
     }
     
-
+    vOutColor.a = 0.f;
     return vOutColor;
 }
 

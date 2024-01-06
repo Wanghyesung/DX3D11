@@ -292,6 +292,8 @@ void CCamera::render()
 	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::BOTION_BLUER)->OMSet(true);
 	render_blur();
 
+	render_middle();
+
 	// Light MRT 로 변경
 	// Deferred 물체에 광원 적용시키기
 	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::LIGHT)->OMSet(false);
@@ -302,38 +304,10 @@ void CCamera::render()
 		vecLight3D[i]->render();
 	}
 
+	render_final();
 	
-	// Deferred MRT 에 그린 물체에 Light MRT 출력한 광원과 합쳐서
-	// 다시 SwapChain 타겟으로 으로 그리기
-	// SwapChain MRT 로 변경
-	// 오브젝트 없이 강제로 렌더링되기 위해서 mesh와 material을 가져와서 렌더링
-
-	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
-	if (m_iCamIdx != (int)CAMERA_TYPE::UI)
-	{
-		static Ptr<CMesh> pRectMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
-		static Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"MergeMtrl");
-
-		static bool bSet = false;
-		if (!bSet)
-		{
-			bSet = true;
-			pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"ColorTargetTex"));
-			pMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex"));
-			pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"SpecularTargetTex"));
-			pMtrl->SetTexParam(TEX_3, CResMgr::GetInst()->FindRes<CTexture>(L"EmissiveTargetTex"));
-			pMtrl->SetTexParam(TEX_4, CResMgr::GetInst()->FindRes<CTexture>(L"ShadowTargetTex"));
-
-			pMtrl->SetTexParam(TEX_7, CResMgr::GetInst()->FindRes<CTexture>(L"VelocityTex"));
-		}
-		pMtrl->UpdateData();
-		pRectMesh->render();
-	}
 	// Forward Rendering
 	// SwapChain MRT 로 변경
-	
-
-	//여기서 색처리
 	render_opaque();
 	render_mask();
 	render_decal();
@@ -451,6 +425,55 @@ void CCamera::render_ui()
 	for (size_t i = 0; i < m_vecUI.size(); ++i)
 	{
 		m_vecUI[i]->render();
+	}
+}
+
+void CCamera::render_middle()
+{
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::MIDDLE)->OMSet();
+	if (m_iCamIdx != (int)CAMERA_TYPE::UI)
+	{
+		static Ptr<CMesh> pRectMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+		static Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"MiddleMtrl");
+
+		static bool bSet = false;
+		if (!bSet)
+		{
+			bSet = true;
+			pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"ColorTargetTex"));//color값
+			pMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"VelocityTex"));
+		}
+
+		pMtrl->UpdateData();
+		pRectMesh->render();
+	}
+}
+
+void CCamera::render_final()
+{
+	// Deferred MRT 에 그린 물체에 Light MRT 출력한 광원과 합쳐서
+	// 다시 SwapChain 타겟으로 으로 그리기
+	// SwapChain MRT 로 변경
+	// 오브젝트 없이 강제로 렌더링되기 위해서 mesh와 material을 가져와서 렌더링
+
+	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN)->OMSet();
+	if (m_iCamIdx != (int)CAMERA_TYPE::UI)
+	{
+		static Ptr<CMesh> pRectMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
+		static Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"MergeMtrl");
+
+		static bool bSet = false;
+		if (!bSet)
+		{
+			bSet = true;
+			pMtrl->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"MiddleTargetTex"));
+			pMtrl->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex"));
+			pMtrl->SetTexParam(TEX_2, CResMgr::GetInst()->FindRes<CTexture>(L"SpecularTargetTex"));
+			pMtrl->SetTexParam(TEX_3, CResMgr::GetInst()->FindRes<CTexture>(L"EmissiveTargetTex"));
+			pMtrl->SetTexParam(TEX_4, CResMgr::GetInst()->FindRes<CTexture>(L"ShadowTargetTex"));
+		}
+		pMtrl->UpdateData();
+		pRectMesh->render();
 	}
 }
 

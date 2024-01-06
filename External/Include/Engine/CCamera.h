@@ -104,6 +104,8 @@ private:
     void render_postprocess();
     void render_ui();
 
+    void render_middle(); //중간 병합
+    void render_final(); //최종 병합
 
     void CalcViewMat();
     void CalcProjMat();

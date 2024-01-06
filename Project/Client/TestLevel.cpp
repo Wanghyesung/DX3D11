@@ -128,7 +128,7 @@ void CreateTestLevel()
 	
 	pLightObj->Transform()->SetRelativeRot(Vec3(XM_PI / 4.f, XM_PI / 4.f, 0.f));
 	pLightObj->Light3D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
-	pLightObj->Light3D()->SetLightColor(Vec3(0.7f, 0.7f, 0.7f));
+	pLightObj->Light3D()->SetLightColor(Vec3(0.8f, 0.8f, 0.8f));
 	pLightObj->Light3D()->SetLightAmbient(Vec3(0.3f, 0.3f, 0.3f));
 	
 	SpawnGameObject(pLightObj, Vec3(-2000, 2000.f, -2000.f), 0);
@@ -203,7 +203,18 @@ void CreateTestLevel()
 	//pLightObj->Light3D()->SetLightAmbient(Vec3(1.f, 1.f, 1.f));
 	//SpawnGameObject(pLightObj, Vec3(-130.f, -130.f, 0.f), 0);
 
-
+	//pObject = new CGameObject;
+	//pObject->SetName(L"Tess Object");
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CMeshRender);
+	//
+	//pObject->Transform()->SetRelativeScale(Vec3(200.f, 200.f, 200.f));
+	//pObject->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
+	//
+	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TessMtrl"));
+	//pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\skybox\\Sky01.png"));
+	//SpawnGameObject(pObject, Vec3(0.f, 0.f, 100.f), L"Default");
 
 	
 	

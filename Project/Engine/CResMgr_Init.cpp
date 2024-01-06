@@ -762,6 +762,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 		
 	pShader->SetRSType(RS_TYPE::CULL_BACK);
 	pShader->SetDSType(DS_TYPE::LESS_EQUAL);
+	//pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_DEFERRED);
 	
 	//parameter
@@ -812,6 +813,30 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetBSType(BS_TYPE::ONE_ONE);
 
 	AddRes(pShader->GetKey(), pShader);
+
+
+	// =====================================
+	// MergeShader
+	// MRT              : MIDDLE
+	// Domain           : ------
+	// Mesh             : RectMesh
+	// Rasterizer       : CULL_BACK
+	// DepthStencil     : NO_TEST_NO_WRITE
+	// Blend            : Default
+	// =====================================
+	pShader = new CGraphicsShader;
+	pShader->SetKey(L"MiddleShader");
+
+	pShader->CreateVertexShader(L"shader\\middle.fx", "VS_MiddleMergeShader");
+	pShader->CreatePixelShader(L"shader\\middle.fx", "PS_MiddleMergeShader");
+
+	pShader->SetRSType(RS_TYPE::CULL_BACK);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	//오브젝트가이 사용하는 쉐이더
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_LIGHT);
+
+	AddRes(pShader->GetKey(), pShader);
+
 
 	// =====================================
 	// MergeShader
@@ -865,6 +890,31 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetDSType(DS_TYPE::LESS_EQUAL);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_BLUR);
+
+	AddRes(pShader->GetKey(), pShader);
+
+	// =====================================
+	// Tess Shader
+	// MRT              : SwapChain
+	// Domain           : DOMAIN_OPAQUE	
+	// Rasterizer       : CULL_NONE
+	// DepthStencil     : LESS
+	// Blend            : Default
+	// =====================================
+	pShader = new CGraphicsShader;
+	pShader->SetKey(L"TessShader");
+
+	pShader->CreateVertexShader(L"shader\\tess.fx", "VS_Tess");
+	pShader->CreateHullShader(L"shader\\tess.fx", "HS_Tess");
+	pShader->CreateDomainShader(L"shader\\tess.fx", "DS_Tess");
+	pShader->CreatePixelShader(L"shader\\tess.fx", "PS_Tess");
+
+	//pShader->SetRSType(RS_TYPE::WIRE_FRAME);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+
+	pShader->SetTopology(D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 
 	AddRes(pShader->GetKey(), pShader);
 }
@@ -986,6 +1036,11 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PointLightShader"));
 	AddRes(L"PointLightMtrl", pMtrl);
 
+	// MiddleMtrl
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"MiddleShader"));
+	AddRes(L"MiddleMtrl", pMtrl);
+
 	// MergeMtrl
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"MergeShader"));
@@ -1000,5 +1055,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl = new CMaterial(true);
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"MotionBlurShader"));
 	AddRes(L"MotionBlurMtrl", pMtrl);
+
+	// TessMtrl
+	pMtrl = new CMaterial(true);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TessShader"));
+	AddRes(L"TessMtrl", pMtrl);
 
 }

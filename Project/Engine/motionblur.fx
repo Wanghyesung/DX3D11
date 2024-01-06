@@ -28,7 +28,7 @@ struct VS_MOTIONBLUR_OUT
 
 struct PS_MOTIONLUR_OUT
 {
-    float4 vBlur : SV_Target0;
+    float4 vVelocity  : SV_Target0;
 };
 
 
@@ -41,7 +41,7 @@ struct PS_MOTIONLUR_OUT
 // Blend State          : Default
 
 // Parameter
-#define PrevPos 
+ 
 // ===============
 
 
@@ -65,7 +65,6 @@ VS_MOTIONBLUR_OUT VS_Motion_Blur(VS_MOTIONBLUR_IN _in)
         output.vVelocity = float4(0.f, 0.f, 0.f, 0.f);
         return output;
     }
-   
     
     //0~1π¸¿ß ∏¬√Áº≠
     float2 vVelocity = normalize(vNewPos.xy / vNewPos.w - vPrevPos.xy/ vPrevPos.w);
@@ -90,6 +89,8 @@ VS_MOTIONBLUR_OUT VS_Motion_Blur(VS_MOTIONBLUR_IN _in)
     
    output.vVelocity.z = output.vPosition.z;
    output.vVelocity.w = output.vPosition.w;
+   //±Ì¿Ã
+    
     
     return output;
 }
@@ -99,14 +100,30 @@ PS_MOTIONLUR_OUT PS_Motion_Blur(VS_MOTIONBLUR_OUT _in)
 {
     PS_MOTIONLUR_OUT output = (PS_MOTIONLUR_OUT) 0.f;
     
-    output.vBlur.xy = _in.vVelocity.xy;
+    output.vVelocity.xy = _in.vVelocity.xy;
     
-    output.vBlur.w = _in.vVelocity.z / _in.vVelocity.w;
+    output.vVelocity.w = _in.vVelocity.z / _in.vVelocity.w;
     //±Ì¿Ã
-    output.vBlur.a = 1.f;
-    
+
+    output.vVelocity.z = 1.f;
+ 
     return output;
 }
+
+// ===============
+// Std3D_Deferred
+// DOMAIN : Deferred
+// MRT    : DEFERRED MRT
+// Rasterizer State     : CULL_BACK
+// DepthStencil State   : LESS
+// Blend State          : Default
+
+// Parameter
+ 
+// ===============
+
+
+
 
 
 #endif

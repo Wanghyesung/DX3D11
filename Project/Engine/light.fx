@@ -218,7 +218,6 @@ PS_OUT PS_PointLightShader(VS_OUT _in)
 #define EmissiveTargetTex g_tex_3
 #define ShadowTargetTex g_tex_4
 
-#define VelocityTargetTex g_tex_7
 
 //빛, 반사계수 , 색 텍스쳐를 병합해서 스왑체인에
 VS_OUT VS_MergeShader(VS_IN _in)
@@ -240,36 +239,19 @@ float4 PS_MergeShader(VS_OUT _in) : SV_Target
     float2 vScreenUV = _in.vPosition.xy / g_Resolution.xy;
 
     
-    float4 velocity = VelocityTargetTex.Sample(g_sam_0, vScreenUV);
     
-    const int SAMPLE_COUNT = 10; // 샘플링 횟수
-       
-    velocity.xy /= SAMPLE_COUNT;
-    
-    float4 vColor;
-    for (int i = 0; i < SAMPLE_COUNT; ++i)
-    {
-        float2 sampleTexCoord = vScreenUV + (velocity.xy * float(i) * 0.04f);
-        
-        vColor += ColorTargetTex.Sample(g_sam_0, sampleTexCoord);
-    }
-    
-    vColor /= SAMPLE_COUNT;
-    //float4 vColor = ColorTargetTex.Sample(g_sam_0, vScreenUV);
-  
+    float4 vColor = ColorTargetTex.Sample(g_sam_0, vScreenUV.xy);
     float4 vDiffuse = DiffuseTargetTex.Sample(g_sam_0, vScreenUV);
     float4 vSpecular = SpecularTargetTex.Sample(g_sam_0, vScreenUV);
     float4 vEmissive = EmissiveTargetTex.Sample(g_sam_0, vScreenUV);
     float fShadowPow = ShadowTargetTex.Sample(g_sam_0, vScreenUV).r;
     
     
-    //vcolor.a = 재질계수
-    vOutColor.xyz = vColor.xyz * vDiffuse.xyz +// * (1.f - fShadowPow) +
-                    (vSpecular.xyz * vColor.a) +//* (1.f - fShadowPow) +
+    vOutColor.xyz = vColor.xyz * vDiffuse.xyz + // * (1.f - fShadowPow) +
+                    (vSpecular.xyz * vColor.a) + //* (1.f - fShadowPow) +
                     vEmissive.xyz;
     
-    
-    vColor.a = 1.f;
+    vColor.a = 0.f;
     return vOutColor;
 }
 

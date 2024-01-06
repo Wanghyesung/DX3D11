@@ -553,5 +553,11 @@
     <FxCompile Include="motionblur.fx">
       <Filter>Source\08. ShaderCode</Filter>
     </FxCompile>
+    <FxCompile Include="tess.fx">
+      <Filter>Source\08. ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="middle.fx">
+      <Filter>Source\08. ShaderCode</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

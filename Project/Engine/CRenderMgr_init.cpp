@@ -74,8 +74,9 @@ void CRenderMgr::CreateMRT()
         m_MRT[(UINT)MRT_TYPE::DEFERRED]->Create(arrRTTex, 5, nullptr);
     }
 
-    //속도 mrt 
-  
+    // ====================
+    // motionblur MRT 만들기
+    // ====================
     {
         Vec2 vResol = CDevice::GetInst()->GetRenderResolution();
 
@@ -90,8 +91,9 @@ void CRenderMgr::CreateMRT()
     }
 
 
+
     // ====================
-    // Light MRT 만들기
+    // Decal MRT 만들기
     // ====================
     {
         m_MRT[(UINT)MRT_TYPE::DEFERRED_DECAL] = new CMRT;
@@ -125,6 +127,26 @@ void CRenderMgr::CreateMRT()
 
         m_MRT[(UINT)MRT_TYPE::LIGHT]->Create(arrRTTex, 3, nullptr);
     }
+
+    //중간 병합 MRT (모션블러 ...) 합친값을 middletargetTex에 넣기
+    // ====================
+   // MiddleMap MRT 만들기
+   // ====================
+    {
+        m_MRT[(UINT)MRT_TYPE::MIDDLE] = new CMRT;
+
+        Vec2 vResol = CDevice::GetInst()->GetRenderResolution();
+
+        Ptr<CTexture> arrRTTex[8] = {};
+        
+        arrRTTex[0] = CResMgr::GetInst()->CreateTexture(L"MiddleTargetTex", vResol.x, vResol.y
+            , DXGI_FORMAT_R32G32B32A32_FLOAT
+            , D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET);
+      
+        m_MRT[(UINT)MRT_TYPE::MIDDLE]->Create(arrRTTex, 1, nullptr);
+    }
+
+
 
     // ====================
    // ShadowMap MRT 만들기

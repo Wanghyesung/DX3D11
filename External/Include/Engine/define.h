@@ -318,6 +318,8 @@ enum class MRT_TYPE
 
 	BOTION_BLUER,
 
+	MIDDLE,
+
 	DEFERRED_DECAL,
 
 	LIGHT,
