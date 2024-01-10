@@ -82,15 +82,16 @@ void CRenderMgr::CreateMRT()
 
         m_MRT[(UINT)MRT_TYPE::BOTION_BLUER] = new CMRT;
 
-        Ptr<CTexture> arrRTTex[1] = {};
+        Ptr<CTexture> arrRTTex[8] = {};
         arrRTTex[0] = CResMgr::GetInst()->CreateTexture(L"VelocityTex", vResol.x, vResol.y
             , DXGI_FORMAT_R32G32B32A32_FLOAT
             , D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET);
 
-        m_MRT[(UINT)MRT_TYPE::BOTION_BLUER]->Create(arrRTTex, 1, nullptr);
+        arrRTTex[1] = CResMgr::GetInst()->FindRes<CTexture>(L"DataTargetTex");
+
+        m_MRT[(UINT)MRT_TYPE::BOTION_BLUER]->Create(arrRTTex, 2, nullptr);
     }
-
-
+    
 
     // ====================
     // Decal MRT ¸¸µé±â

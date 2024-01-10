@@ -9,6 +9,7 @@
 #include "CMaterial.h"
 #include "CPrefab.h"
 #include "CSound.h"
+#include "CMeshData.h"
 
 #include "CPathMgr.h"
 
@@ -43,13 +44,15 @@ public:
 
     Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
 
+    Ptr<CMeshData> LoadFBX(const wstring& _strPath);
+
     bool IsResourceChanged() { return m_Changed; }
 
     template<typename T>
     Ptr<T> FindRes(const wstring& _strKey);
 
     template<typename T>
-    void AddRes(const wstring& _strKey, Ptr<T>& _Res);
+    void AddRes(const wstring& _strKey, Ptr<T> _Res);
 
     template<typename T>
     Ptr<T> Load(const wstring& _strKey, const wstring& _strRelativePath);
@@ -64,7 +67,7 @@ template<typename T>
 RES_TYPE GetResType()
 {
     const type_info& mesh = typeid(CMesh);
-    //const type_info& meshdata = typeid(CMeshData);
+    const type_info& meshdata = typeid(CMeshData);
     const type_info& material = typeid(CMaterial);
     const type_info& texture = typeid(CTexture);
     const type_info& sound = typeid(CSound);
@@ -74,6 +77,8 @@ RES_TYPE GetResType()
 
     if (typeid(T).hash_code() == mesh.hash_code())
         return RES_TYPE::MESH;
+    if (typeid(T).hash_code() == meshdata.hash_code())
+        return RES_TYPE::MESHDATA;
     if (typeid(T).hash_code() == gs.hash_code())
         return RES_TYPE::GRAPHICS_SHADER;
     if (typeid(T).hash_code() == cs.hash_code())
@@ -105,7 +110,7 @@ inline Ptr<T> CResMgr::FindRes(const wstring& _strKey)
 
 
 template<typename T>
-inline void CResMgr::AddRes(const wstring& _strKey, Ptr<T>& _Res)
+inline void CResMgr::AddRes(const wstring& _strKey, Ptr<T> _Res)
 {
     // 중복키로 리소스 추가하려는 경우
     assert( ! FindRes<T>(_strKey).Get() );

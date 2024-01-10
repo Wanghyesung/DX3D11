@@ -5,6 +5,7 @@
 
 cbuffer TRANSFORM : register(b0)
 {
+    
     //g_matWVP : 해당 vertexshader(Vs_Std2D)를 사용하는 물체의 월드상의 크기, 회전
     //, 이동 정보를 정장하고 있는 행렬
     //b0 : gpu가 사용할 수 있게 상수레지스터에 바인딩을 해둠
@@ -28,6 +29,11 @@ cbuffer TRANSFORM : register(b0)
 
 cbuffer MATERIAL : register(b1)
 {
+    float4 g_bDiff;
+    float4 g_vSpec;
+    float4 g_vAmb;
+    float4 g_vEmv;
+    
     int g_int_0;
     int g_int_1;
     int g_int_2;
@@ -70,6 +76,7 @@ cbuffer MATERIAL : register(b1)
 
 cbuffer GLOBAL : register(b2)
 {
+    float4 g_CameraRot;
     float2 g_Resolution;
     float  g_DT;
     float  g_AccTime;

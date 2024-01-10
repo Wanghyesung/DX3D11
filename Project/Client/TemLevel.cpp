@@ -162,13 +162,13 @@ void CreateCircle()
 	pSun->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 	
 	pSun->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pSun->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pSun->MeshRender()->GetDynamicMaterial();
+	pSun->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	pSun->MeshRender()->GetDynamicMaterial(0);
 	int SpecCoeff = 1;
-	pSun->MeshRender()->GetMaterial()->SetScalarParam(FLOAT_0, &SpecCoeff);
+	pSun->MeshRender()->GetMaterial(0)->SetScalarParam(FLOAT_0, &SpecCoeff);
 	int iActiveLight = 0;
-	pSun->MeshRender()->GetMaterial()->SetScalarParam(INT_1, &iActiveLight);
-	pSun->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\sun.jpg"));
+	pSun->MeshRender()->GetMaterial(0)->SetScalarParam(INT_1, &iActiveLight);
+	pSun->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\sun.jpg"));
 	//pSun->MeshRender()->GetMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
 	SpawnGameObject(pSun, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 
@@ -187,9 +187,9 @@ void CreateCircle()
 	pSU->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 
 	pSU->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pSU->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pSU->MeshRender()->GetDynamicMaterial();
-	pSU->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\su.jpg"));
+	pSU->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	pSU->MeshRender()->GetDynamicMaterial(0);
+	pSU->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\su.jpg"));
 	SpawnGameObject(pSU, Vec3(2500.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 
 	CGameObject* pGM = new CGameObject;
@@ -206,9 +206,9 @@ void CreateCircle()
 	pGM->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 	
 	pGM->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pGM->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pGM->MeshRender()->GetDynamicMaterial();
-	pGM->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\gm.jpg"));
+	pGM->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	pGM->MeshRender()->GetDynamicMaterial(0);
+	pGM->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\gm.jpg"));
 	SpawnGameObject(pGM, Vec3(3300.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 	
 	CGameObject* pGI = new CGameObject;
@@ -225,9 +225,9 @@ void CreateCircle()
 	pGI->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 	
 	pGI->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pGI->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pGI->MeshRender()->GetDynamicMaterial();
-	pGI->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\gi.jpg"));
+	pGI->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	pGI->MeshRender()->GetDynamicMaterial(0);
+	pGI->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\gi.jpg"));
 	SpawnGameObject(pGI, Vec3(4200.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 	//
 	//
@@ -245,9 +245,9 @@ void CreateCircle()
 	pHW->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 	
 	pHW->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pHW->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pHW->MeshRender()->GetDynamicMaterial();
-	pHW->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\hw.jpg"));
+	pHW->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	pHW->MeshRender()->GetDynamicMaterial(0);
+	pHW->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\hw.jpg"));
 	SpawnGameObject(pHW, Vec3(5200.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 	//
 	//
@@ -265,9 +265,9 @@ void CreateCircle()
 	pMOK->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 	
 	pMOK->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pMOK->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
+	pMOK->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
 	//pSU->MeshRender()->GetDynamicMaterial();
-	pMOK->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\mk.jpg"));
+	pMOK->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\mk.jpg"));
 	SpawnGameObject(pMOK, Vec3(7500.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 	
 	
@@ -285,9 +285,9 @@ void CreateCircle()
 	pTO->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 	
 	pTO->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pTO->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pTO->MeshRender()->GetDynamicMaterial();
-	pTO->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\to.jpg"));
+	pTO->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	pTO->MeshRender()->GetDynamicMaterial(0);
+	pTO->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\to.jpg"));
 	SpawnGameObject(pTO, Vec3(9400.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 	
 	
@@ -305,9 +305,9 @@ void CreateCircle()
 	pCHUN->Transform()->SetRelativeRot(Vec3(1000.f, 1000.f, 1000.f));
 	
 	pCHUN->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pCHUN->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pCHUN->MeshRender()->GetDynamicMaterial();
-	pCHUN->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\chun.jpg"));
+	pCHUN->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	pCHUN->MeshRender()->GetDynamicMaterial(0);
+	pCHUN->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\chun.jpg"));
 	SpawnGameObject(pCHUN, Vec3(10500.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 	
 	
@@ -325,9 +325,9 @@ void CreateCircle()
 	pHE->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 	
 	pHE->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pHE->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	pHE->MeshRender()->GetDynamicMaterial();
-	pHE->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\he.jpg"));
+	pHE->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	pHE->MeshRender()->GetDynamicMaterial(0);
+	pHE->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\he.jpg"));
 	SpawnGameObject(pHE, Vec3(12500.f, 0.f, 0.f), (int)LAYER_TYPE::Default);
 }
 
@@ -355,9 +355,9 @@ void Createcomet()
 	GameObj->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
 	
 	GameObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	GameObj->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"));
-	GameObj->MeshRender()->GetDynamicMaterial();
-	GameObj->MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\sun.jpg"));
+	GameObj->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	GameObj->MeshRender()->GetDynamicMaterial(0);
+	GameObj->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\comet\\sun.jpg"));
 	SpawnGameObject(GameObj, Vec3(0, 4000.f, 0.f), (int)LAYER_TYPE::Default);
 
 }

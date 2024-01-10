@@ -21,6 +21,9 @@
 #include "C:\Users\user\source\DirectX\Project\Engine\CMesh.cpp"
 
 
+#include "C:\Users\user\source\DirectX\Project\Engine\CMeshData.cpp"
+
+
 #include "C:\Users\user\source\DirectX\Project\Engine\CMeshRender.cpp"
 
 

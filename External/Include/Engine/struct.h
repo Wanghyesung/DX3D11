@@ -197,10 +197,19 @@ struct tTransform
 
 extern tTransform g_transform;
 
+struct tMtrlData
+{
+	Vec4 vDiff;
+	Vec4 vSpec;
+	Vec4 vAmb;
+	Vec4 vEmv;
+};
 
 
 struct tMtrlConst
 {
+	tMtrlData mtrl;
+
 	//상황에 맞게 사용
 	int arrInt[4];
 	float arrFloat[4];
@@ -215,6 +224,7 @@ struct tMtrlConst
 
 struct tGlobal
 {
+	Vec4  CameraRot;
 	Vec2  Resolution;
 	float tDT;
 	float tAccTime;

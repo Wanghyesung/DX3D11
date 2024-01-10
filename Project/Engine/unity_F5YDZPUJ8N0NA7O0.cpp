@@ -39,6 +39,9 @@
 #include "C:\Users\user\source\DirectX\Project\Engine\CEventMgr.cpp"
 
 
+#include "C:\Users\user\source\DirectX\Project\Engine\CFBXLoader.cpp"
+
+
 #include "C:\Users\user\source\DirectX\Project\Engine\CFontMgr.cpp"
 
 

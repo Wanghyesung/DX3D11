@@ -93,6 +93,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     vShadowMapUV.x = vShadowMapUV.x / 2.f + 0.5f;
     vShadowMapUV.y = (1.f - vShadowMapUV.y / 2.f) - 0.5f;
     
+    //텍스쳐 밖의 물체가 UV로 바뀔때 0~1 범위를 넘어갈 수 있음
     if (vShadowMapUV.x < 0.f || 1.f < vShadowMapUV.x ||
         vShadowMapUV.y < 0.f || 1.f < vShadowMapUV.y)
     {
@@ -100,6 +101,7 @@ PS_OUT PS_DirLightShader(VS_OUT _in)
     }
     else
     {
+        //shadowmap에서 본 물체의 깊이값과 메인 카메라에서 찍은 깊이값을 비교
         float fDepth = vLightProj.z / vLightProj.w;
         float fLightDepth = ShadowMapTargetTex.Sample(g_sam_1, vShadowMapUV);
     
@@ -239,7 +241,6 @@ float4 PS_MergeShader(VS_OUT _in) : SV_Target
     float2 vScreenUV = _in.vPosition.xy / g_Resolution.xy;
 
     
-    
     float4 vColor = ColorTargetTex.Sample(g_sam_0, vScreenUV.xy);
     float4 vDiffuse = DiffuseTargetTex.Sample(g_sam_0, vScreenUV);
     float4 vSpecular = SpecularTargetTex.Sample(g_sam_0, vScreenUV);
@@ -251,7 +252,7 @@ float4 PS_MergeShader(VS_OUT _in) : SV_Target
                     (vSpecular.xyz * vColor.a) + //* (1.f - fShadowPow) +
                     vEmissive.xyz;
     
-    vColor.a = 0.f;
+    //vColor.a = 0.f;
     return vOutColor;
 }
 

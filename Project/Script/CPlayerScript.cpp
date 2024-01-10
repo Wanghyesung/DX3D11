@@ -23,14 +23,14 @@ CPlayerScript::~CPlayerScript()
 
 void CPlayerScript::begin()
 {
-	MeshRender()->GetDynamicMaterial();
+	MeshRender()->GetDynamicMaterial(0);
 }
 
 void CPlayerScript::tick()
 {
 	if (m_iActive == 0)
 		return;
-
+	
 	//Vec3 vCurPos = Transform()->GetRelativePos();
 	
 	Vec3 vFoward = Transform()->GetRelativeDir(DIR_TYPE::FRONT);

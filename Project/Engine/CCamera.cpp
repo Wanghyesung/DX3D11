@@ -199,8 +199,8 @@ void CCamera::SortObject()
 
 				// 렌더링 기능이 없는 오브젝트는 제외
 				if (nullptr == pRenderCom
-					|| nullptr == pRenderCom->GetMaterial()
-					|| nullptr == pRenderCom->GetMaterial()->GetShader())
+					|| nullptr == pRenderCom->GetMaterial(0)
+					|| nullptr == pRenderCom->GetMaterial(0)->GetShader())
 					continue;
 
 				// Frustum Check
@@ -210,7 +210,7 @@ void CCamera::SortObject()
 
 
 				// 쉐이더 도메인에 따른 분류
-				SHADER_DOMAIN eDomain = pRenderCom->GetMaterial()->GetShader()->GetDomain();
+				SHADER_DOMAIN eDomain = pRenderCom->GetMaterial(0)->GetShader()->GetDomain();
 				switch (eDomain)
 				{
 				case SHADER_DOMAIN::DOMAIN_DEFERRED:
@@ -266,8 +266,8 @@ void CCamera::SortObject_Shadow()
 
 				// 렌더링 기능이 없는 오브젝트는 제외
 				if (nullptr == pRenderCom
-					|| nullptr == pRenderCom->GetMaterial()
-					|| nullptr == pRenderCom->GetMaterial()->GetShader())
+					|| nullptr == pRenderCom->GetMaterial(0)
+					|| nullptr == pRenderCom->GetMaterial(0)->GetShader())
 				{
 					continue;
 				}
@@ -445,7 +445,7 @@ void CCamera::render_middle()
 		}
 
 		pMtrl->UpdateData();
-		pRectMesh->render();
+		pRectMesh->render(0);
 	}
 }
 
@@ -473,7 +473,7 @@ void CCamera::render_final()
 			pMtrl->SetTexParam(TEX_4, CResMgr::GetInst()->FindRes<CTexture>(L"ShadowTargetTex"));
 		}
 		pMtrl->UpdateData();
-		pRectMesh->render();
+		pRectMesh->render(0);
 	}
 }
 

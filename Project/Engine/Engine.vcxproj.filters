@@ -175,6 +175,12 @@
     <ClInclude Include="CCollider3D.h">
       <Filter>Source\06. Component\Collider3D</Filter>
     </ClInclude>
+    <ClInclude Include="CFBXLoader.h">
+      <Filter>Source\07. Resource\7.FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshData.h">
+      <Filter>Source\07. Resource\7.FBX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -342,6 +348,12 @@
     <ClCompile Include="CCollider3D.cpp">
       <Filter>Source\06. Component\Collider3D</Filter>
     </ClCompile>
+    <ClCompile Include="CFBXLoader.cpp">
+      <Filter>Source\07. Resource\7.FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshData.cpp">
+      <Filter>Source\07. Resource\7.FBX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -496,6 +508,9 @@
     </Filter>
     <Filter Include="Source\06. Component\Collider3D">
       <UniqueIdentifier>{b824555e-8234-4b56-ae6f-1ac916a47102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\07. Resource\7.FBX">
+      <UniqueIdentifier>{b080246f-d32b-4b62-bde8-5063ac44a634}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

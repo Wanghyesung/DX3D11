@@ -67,7 +67,7 @@ CParticleSystem::CParticleSystem()
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
 
 	// 파티클 전용 재질
-	SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleRenderMtrl"));
+	SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleRenderMtrl"),0);
 
 	// 파티클 업데이트 컴퓨트 쉐이더	
 	m_UpdateCS = (CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"ParticleUpdateCS").Get();
@@ -147,9 +147,9 @@ void CParticleSystem::render()
 
 	// Particle Render	
 	Ptr<CTexture> pParticleTex = CResMgr::GetInst()->Load<CTexture>(L"Particle_0", L"texture\\particle\\fire.png");
-	GetMaterial()->SetTexParam(TEX_0, pParticleTex);
+	GetMaterial(0)->SetTexParam(TEX_0, pParticleTex);
 
-	GetMaterial()->UpdateData();
+	GetMaterial(0)->UpdateData();
 	GetMesh()->render_particle(m_ModuleData.iMaxParticleCount);
 
 	// 파티클 버퍼 바인딩 해제

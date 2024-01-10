@@ -27,14 +27,14 @@ void CDecal::SetDeferredDecal(bool _bDeferred)
 
 	if (m_bDeferred)
 	{
-		SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DeferredDecalMtrl"));
+		SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DeferredDecalMtrl"),0);
 	}
 	else
 	{
-		SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DecalMtrl"));
+		SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DecalMtrl"),0);
 	}
 
-	GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
+	GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
 }
 
 void CDecal::finaltick()
@@ -45,17 +45,17 @@ void CDecal::finaltick()
 void CDecal::render()
 {
 
-	if (nullptr == GetMaterial() || nullptr == GetMesh())
+	if (nullptr == GetMaterial(0) || nullptr == GetMesh())
 		return;
 
 	Transform()->UpdateData();
 
 	//자페발광할것인지
 	int IsEmissive = m_bEmissive;
-	GetMaterial()->SetScalarParam(INT_0, &IsEmissive);
-	GetMaterial()->UpdateData();
+	GetMaterial(0)->SetScalarParam(INT_0, &IsEmissive);
+	GetMaterial(0)->UpdateData();
 
-	GetMesh()->render();
+	GetMesh()->render(0);
 }
 
 

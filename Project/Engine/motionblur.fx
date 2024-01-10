@@ -29,13 +29,14 @@ struct VS_MOTIONBLUR_OUT
 struct PS_MOTIONLUR_OUT
 {
     float4 vVelocity  : SV_Target0;
+    float4 vData : SV_Target1;
 };
 
 
 // ===============
-// Std3D_Deferred
-// DOMAIN : Deferred
-// MRT    : DEFERRED MRT
+// MotionBlur
+// DOMAIN : Motionblur
+// MRT    : MotionBlur MRT
 // Rasterizer State     : CULL_BACK
 // DepthStencil State   : LESS
 // Blend State          : Default
@@ -47,6 +48,7 @@ struct PS_MOTIONLUR_OUT
 
 VS_MOTIONBLUR_OUT VS_Motion_Blur(VS_MOTIONBLUR_IN _in)
 {
+    
     VS_MOTIONBLUR_OUT output = (VS_MOTIONBLUR_OUT) 0.f;
     
     output.vUV = _in.vUV;
@@ -58,18 +60,23 @@ VS_MOTIONBLUR_OUT VS_Motion_Blur(VS_MOTIONBLUR_IN _in)
     vPrevPos = mul(vPrevPos, g_matPrevView);
     vPrevPos = mul(vPrevPos, g_matPrevProj);
     
+    //float4 vPos = mul(float4(_in.vPos, 1.f), g_matWorld);
+    //float4 vPrev = mul(float4(_in.vPos, 1.f), g_matPrevWorld);
+    
+    //float3 vDir = vPos.xyz - vPrev.xyz;
+    
     float3 vDir = output.vPosition.xyz - vPrevPos.xyz;
     float3 vAbsDir = abs(vDir);
     if(vAbsDir.x <= 0.05f && vAbsDir.y <= 0.05f)
     {
-        output.vVelocity = float4(0.f, 0.f, 0.f, 0.f);
-        return output;
+       output.vVelocity = float4(0.f, 0.f, 0.f, 0.f);
+      return output;
     }
     
     //0~1¹üÀ§ ¸ÂÃç¼­
-    float2 vVelocity = normalize(vNewPos.xy / vNewPos.w - vPrevPos.xy/ vPrevPos.w);
-    //UVÁÂÇ¥°è·Î ÀüÈ¯
-    vDir.xy = vVelocity.xy * 0.5f; //+0.5f;
+    float2 vVelocity = normalize(vNewPos.xy / vNewPos.w - vPrevPos.xy / vPrevPos.w);
+    //UVÁÂÇ¥°è·Î ÀüÈ¯ 
+    vDir.xy = vVelocity.xy * 0.5f;
     vDir.y *= -1; //(1.f - vVelocity.y / 2.f) - 0.5f;
     output.vVelocity.xy = vDir.xy;
   
@@ -90,7 +97,7 @@ VS_MOTIONBLUR_OUT VS_Motion_Blur(VS_MOTIONBLUR_IN _in)
    output.vVelocity.z = output.vPosition.z;
    output.vVelocity.w = output.vPosition.w;
    //±íÀÌ
-    
+   
     
     return output;
 }
@@ -107,20 +114,17 @@ PS_MOTIONLUR_OUT PS_Motion_Blur(VS_MOTIONBLUR_OUT _in)
 
     output.vVelocity.z = 1.f;
  
+    if (abs(output.vVelocity.x) > 0.f || abs(output.vVelocity.y) > 0.f)
+    {
+        output.vData.x = 0.f;
+    }
+    else
+    {
+        output.vData.x = 1.f;
+    }
+    
     return output;
 }
-
-// ===============
-// Std3D_Deferred
-// DOMAIN : Deferred
-// MRT    : DEFERRED MRT
-// Rasterizer State     : CULL_BACK
-// DepthStencil State   : LESS
-// Blend State          : Default
-
-// Parameter
- 
-// ===============
 
 
 

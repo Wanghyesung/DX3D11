@@ -108,6 +108,7 @@ void CCameraMoveScript::move_target()
 	vFinalPos.y += 500.f;
 
 	Transform()->SetRelativeRot(vRot);
+	GlobalData.CameraRot = vRot;
 	Transform()->SetRelativePos(vFinalPos);
 }
 

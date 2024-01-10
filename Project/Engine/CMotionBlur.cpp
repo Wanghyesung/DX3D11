@@ -35,6 +35,8 @@ void CMotionBlur::finaltick()
 	//
 	//}
 
+	
+	
 	Vec3 vPostion = Transform()->GetRelativePos();
 	m_pMotionBlur->Transform()->SetRelativePos(vPostion);
 	
@@ -57,7 +59,7 @@ void CMotionBlur::create_mesh()
 	m_pMotionBlur->AddComponent(new CMeshRender);
 
 	m_pMotionBlur->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	m_pMotionBlur->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MotionBlurMtrl"));
+	m_pMotionBlur->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MotionBlurMtrl"),0);
 
 	SpawnGameObject(m_pMotionBlur, Vec3(0.f,0.f,0.f), (UINT)LAYER_TYPE::Default);
 }

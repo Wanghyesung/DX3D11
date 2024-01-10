@@ -22,7 +22,7 @@ private:
 
 
     // 리소스 바인딩
-    virtual void UpdateData() = 0;
+    virtual void UpdateData() {};
 
 private:
     // 파일로부터 로딩
@@ -47,6 +47,7 @@ public:
     virtual ~CRes();
 
     friend class CResMgr;
+    friend class CFBXLoader;
 
     template<typename T>
     friend class Ptr;

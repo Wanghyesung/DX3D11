@@ -83,7 +83,7 @@ void CLight3D::render()
 
 	m_Mtrl->UpdateData();
 
-	m_Mesh->render();
+	m_Mesh->render(0);
 }
 
 void CLight3D::render_shadowmap()

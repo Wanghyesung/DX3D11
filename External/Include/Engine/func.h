@@ -41,6 +41,8 @@ const wchar_t* ToWSTring(RES_TYPE);
 const char* ToString(COMPONENT_TYPE);
 const wchar_t* ToWSTring(COMPONENT_TYPE);
 
+//Relative Path 
+wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath);
 
 // Save / Load
 void SaveWString(const wstring& _str, FILE* _File);
