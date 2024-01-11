@@ -72,6 +72,10 @@ cbuffer MATERIAL : register(b1)
     int g_btexarr_0;
     int g_btexarr_1;
     
+    //3d Animation 정보
+    int g_iAnim; //
+    int g_iBoneCount; //내 뼈 행렬 개수
+    int2 padding;
 };
 
 cbuffer GLOBAL : register(b2)
@@ -102,6 +106,10 @@ Texture2DArray g_arrtex_1 : register(t11);
 
 StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t12);
 StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t13);
+
+//Animation3D Bone Matrix Buffer
+//전체 애니메이션에 해당하는 뼈 행렬을 담은 버퍼
+StructuredBuffer<Matrix> g_arrBoneMat : register(t30);
 
 SamplerState g_sam_0 : register(s0);//포인트
 SamplerState g_sam_1 : register(s1);

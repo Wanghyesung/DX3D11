@@ -90,17 +90,24 @@ Ptr<CMeshData> CResMgr::LoadFBX(const wstring& _strPath)
 	if (nullptr != pMeshData)
 		return pMeshData;
 
-	pMeshData = CMeshData::LoadFromFBX(_strPath);
+	vector<Ptr<CMeshData>> vecMeshData = {};
+	//fbx에 구한 메쉬정보와 인덱스 정보, 메테리얼 정보를 통해 meshdata객체를 반환
+	vecMeshData = CMeshData::LoadFromFBX(_strPath);
+	for (int i = 0; i < vecMeshData.size(); ++i)
+	{
+		vecMeshData[i]->SetKey(strName);
+		vecMeshData[i]->SetRelativePath(strName);
 
-	pMeshData->SetKey(strName);
-	pMeshData->SetRelativePath(strName);
+		m_arrRes[(UINT)RES_TYPE::MESHDATA].insert(make_pair(strName, vecMeshData[i].Get()));
 
-	m_arrRes[(UINT)RES_TYPE::MESHDATA].insert(make_pair(strName, pMeshData.Get()));
+		// meshdata 를 실제파일로 저장
+		vecMeshData[i]->Save(strName);
+	}
 
-	// meshdata 를 실제파일로 저장
-	//pMeshData->Save(strName);
+	//pMeshData->SetKey(strName);
+	//pMeshData->SetRelativePath(strName);
 
-	return pMeshData;
+	return vecMeshData[0];
 }
 
 

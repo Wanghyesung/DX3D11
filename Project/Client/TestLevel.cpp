@@ -6,6 +6,7 @@
 #include <Engine\CLayer.h>
 #include <Engine\CGameObject.h>
 #include <Engine\components.h>
+#include <Engine\CMotionBlur.h>
 
 #include <Engine\CResMgr.h>
 #include <Engine\CCollisionMgr.h>
@@ -61,7 +62,7 @@ void CreateTestLevel()
 	pPlayer->AddComponent(new CPlayerScript);
 	pPlayer->AddComponent(new CRigidbody);
 	//pPlayer->AddComponent(new CCollider3D);
-	pPlayer->AddComponent(new CMotionBlur);
+	
 
 	pPlayer->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1000.f));
 	pPlayer->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
@@ -75,7 +76,10 @@ void CreateTestLevel()
 	//pPlayer->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
 	//pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_CUBE_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\skybox\\SkyWater.dds"));
 
-	SpawnGameObject(pPlayer, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Player);
+	pPlayer->AddComponent(new CMotionBlur);
+	pPlayer->MotionBlur()->Initialize();
+
+	SpawnGameObject(pPlayer, Vec3(0.f, 2000.f, 0.f), (int)LAYER_TYPE::Player);
 	
 	// Main Camera Object »ý¼º
 	CGameObject* pMainCam = new CGameObject;
@@ -169,13 +173,18 @@ void CreateTestLevel()
 		Ptr<CMeshData> pMeshData = nullptr;
 		CGameObject* pObj = nullptr;
 
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\untitled.fbx");
-		pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\untitled.mdat");
-		pObj = pMeshData->Instantiate();
-		pObj->SetName(L"untitled");
+		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\house.fbx");
+		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\house.mdat");
+		//pObj = pMeshData->Instantiate();
+		//pObj->SetName(L"House");
 
-		// pMeshData->Save();
-		// pMeshData->Load();
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\monster.fbx");
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"meshdata\\monster.mdat", L"meshdata\\monster.mdat");
+		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\monster.mdat");
+		pObj = pMeshData->Instantiate();
+		pObj->SetName(L"Monster");
+
+		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
 		SpawnGameObject(pObj, Vec3(0.f, 0.f, 100.f), L"Default");
 	}
 

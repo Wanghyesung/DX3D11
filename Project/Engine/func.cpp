@@ -186,6 +186,8 @@ void DrawDebugSphere(const Matrix& _matWorld, Vec4 _vColor, float _fTime, bool D
 }
 
 
+
+
 const char* ToString(RES_TYPE type)
 {
 	return RES_TYPE_STR[(UINT)type];
@@ -251,4 +253,17 @@ void SaveResRef(Ptr<CRes> _Res, FILE* _File)
 const wchar_t* ToWString(COMPONENT_TYPE type)
 {
 	return COMPONENT_TYPE_WSTR[(UINT)type];
+}
+
+Matrix GetMatrixFromFbxMatrix(FbxAMatrix& _mat)
+{
+	Matrix mat;
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			mat.m[i][j] = (float)_mat.Get(i, j);
+		}
+	}
+	return mat;
 }

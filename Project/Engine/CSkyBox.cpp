@@ -15,7 +15,7 @@ CSkyBox::CSkyBox():
 	SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyBoxMtrl"),0);
 
 	int i = 1;
-	GetMaterial(0)->SetScalarParam(INT_1, &i);
+	GetMaterial(0)->SetScalarParam(INT_3, &i);
 	SetFrustumCheck(false);
 }
 

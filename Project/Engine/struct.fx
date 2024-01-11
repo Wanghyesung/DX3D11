@@ -111,4 +111,13 @@ struct tParticleModule
     int Rotate;
 };
 
+struct tSkinningInfo
+{
+    float3 vPos;
+    float3 vTangent;
+    float3 vBinormal;
+    float3 vNormal;
+};
+
+
 #endif

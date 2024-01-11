@@ -241,6 +241,7 @@ void CFBXLoader::GetTangent(FbxMesh* _pMesh
 	, int _iVtxOrder /*폴리곤 단위로 접근하는 순서*/)
 {
 	int iTangentCnt = _pMesh->GetElementTangentCount();
+	
 	if (1 != iTangentCnt)
 		assert(NULL); // 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
 
@@ -395,6 +396,7 @@ void CFBXLoader::LoadTexture()
 	path path_content = CPathMgr::GetInst()->GetContentPath();
 
 	path path_fbx_texture = path_content.wstring() + L"texture\\FBXTexture\\";
+	//파일 fbx안에 텍스쳐를 저장하는 파일 생성
 	if (false == exists(path_fbx_texture))
 	{
 		create_directory(path_fbx_texture);
@@ -424,11 +426,14 @@ void CFBXLoader::LoadTexture()
 				path_origin = vecPath[k];
 				//파일 텍스쳐 이름
 				path_filename = vecPath[k].filename();
-				//현재 텍스쳐 경로(텍스쳐 파일)
+
+				//목적지 텍스쳐 경로(텍스쳐 파일)
 				path_dest = path_fbx_texture.wstring() + path_filename.wstring();
 
+				
 				if (false == exists(path_dest))
 				{
+					//해당 texture경로에 생성한 텍스쳐 카피
 					copy(path_origin, path_dest);
 				}
 				//현재 텍스쳐 경로
@@ -445,9 +450,10 @@ void CFBXLoader::LoadTexture()
 				}
 			}
 		}
-		path_origin = path_origin.parent_path();
-		remove_all(path_origin);
 	}
+	//처음 생성한 fbxtexture파일을 삭제
+	path_origin = path_origin.parent_path();
+	remove_all(path_origin);
 }
 
 void CFBXLoader::CreateMaterial()
@@ -504,7 +510,7 @@ void CFBXLoader::CreateMaterial()
 			if (NULL != pTex)
 				pMaterial->SetTexParam(TEX_PARAM::TEX_3, pTex);
 
-
+			//재릴의 개수만큼 텍스쳐 경로를 저장
 			pMaterial->SetMaterialCoefficient(
 				m_vecContainer[i].vecMtrl[j].tMtrl.vDiff
 				, m_vecContainer[i].vecMtrl[j].tMtrl.vSpec

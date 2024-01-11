@@ -34,6 +34,7 @@ void DrawDebugCube(const Matrix& _matWorld, Vec4 _vColor, float _fTime = 0.f, bo
 void DrawDebugSphere(Vec3 _vWorldPos, float _fRadius, Vec4 _vColor, Vec3 _vRotation, float _fTime = 0.f, bool DepthTest = false);
 void DrawDebugSphere(const Matrix& _matWorld, Vec4 _vColor, float _fTime = 0.f, bool DepthTest = false);
 
+Matrix GetMatrixFromFbxMatrix(FbxAMatrix& _mat);
 
 const char* ToString(RES_TYPE);
 const wchar_t* ToWSTring(RES_TYPE);

@@ -70,14 +70,14 @@ VS_MOTIONBLUR_OUT VS_Motion_Blur(VS_MOTIONBLUR_IN _in)
     if(vAbsDir.x <= 0.05f && vAbsDir.y <= 0.05f)
     {
        output.vVelocity = float4(0.f, 0.f, 0.f, 0.f);
-      return output;
+       return output;
     }
     
     //0~1범위 맞춰서
     float2 vVelocity = normalize(vNewPos.xy / vNewPos.w - vPrevPos.xy / vPrevPos.w);
     //UV좌표계로 전환 
     vDir.xy = vVelocity.xy * 0.5f;
-    vDir.y *= -1; //(1.f - vVelocity.y / 2.f) - 0.5f;
+    vDir.xy *= -1; //(1.f - vVelocity.y / 2.f) - 0.5f;
     output.vVelocity.xy = vDir.xy;
   
     
@@ -85,14 +85,16 @@ VS_MOTIONBLUR_OUT VS_Motion_Blur(VS_MOTIONBLUR_IN _in)
    // 내 노말과 내 방향이 일치하면 현재 위치 
    //아니면 이전위치에 배치
    float a =dot(normalize(output.vNormal), normalize(vDir));
-   if(a < 0.f)
-   {
-        output.vPosition = vPrevPos;
-    }
-   else
-   {
-       output.vPosition = vNewPos;
-   }
+   //if(a < 0.f)
+   //{
+   //     //다른방향
+   //     output.vPosition = vPrevPos;
+   // }
+   //else
+   //{
+   //    //같은방향
+   //    output.vPosition = vNewPos;
+   //}
     
    output.vVelocity.z = output.vPosition.z;
    output.vVelocity.w = output.vPosition.w;
@@ -112,8 +114,6 @@ PS_MOTIONLUR_OUT PS_Motion_Blur(VS_MOTIONBLUR_OUT _in)
     output.vVelocity.w = _in.vVelocity.z / _in.vVelocity.w;
     //깊이
 
-    output.vVelocity.z = 1.f;
- 
     if (abs(output.vVelocity.x) > 0.f || abs(output.vVelocity.y) > 0.f)
     {
         output.vData.x = 0.f;

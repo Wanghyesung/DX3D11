@@ -12,6 +12,12 @@ struct VS_IN
     float3 vNormal : NORMAL;
     float3 vTangent : TANGENT;
     float3 vBinormal : BINORMAL;
+    
+    //뼈 가중치
+    float4 vWeights : BLENDWEIGHT; 
+    //
+    float4 vIndices : BLENDINDICES;
+    
 };
 
 struct VS_OUT
@@ -38,7 +44,7 @@ struct VS_OUT
 
 // Parameter
 #define     SpecCoeff    g_float_0
-#define     bActiveColor g_int_1
+#define     bActiveColor g_int_3
 // ===============
 
 
@@ -46,6 +52,13 @@ VS_OUT VS_Std3D_Deferred(VS_IN _in)
 {
     VS_OUT output = (VS_OUT) 0.f;
         
+    
+    //애니메이션이 있다면 스키닝 작업으로 애니메이션에 맞는 pos를 로컬영역에서 바꾸고 좌표계변환
+    if(g_iAnim)
+    {
+        Skinning(_in.vPos, _in.vTangent, _in.vBinormal, _in.vNormal, _in.vWeights, _in.vIndices, 0);
+    }
+    
     // 로컬에서의 Normal 방향을 월드로 이동      
     output.vViewPos = mul(float4(_in.vPos, 1.f), g_matWV);
     

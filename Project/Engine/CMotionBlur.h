@@ -17,6 +17,9 @@ private:
 public:
 	CMotionBlur();
 	~CMotionBlur();
+
+	void Initialize();
+
 	CLONE(CMotionBlur);
 
 	virtual void finaltick()override;

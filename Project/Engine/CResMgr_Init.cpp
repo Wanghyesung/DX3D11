@@ -4,7 +4,7 @@
 
 #include "CSetColorShader.h"
 #include "CParticleUpdateShader.h"
-
+#include "CAnimation3DShader.h"
 void CResMgr::CreateDefaultMesh()
 {
 	vector<Vtx> vecVtx;
@@ -933,6 +933,12 @@ void CResMgr::CreateDefaultComputeShader()
 	pCS = new CParticleUpdateShader(128, 1, 1);
 	pCS->SetKey(L"ParticleUpdateCS");
 	pCS->CreateComputeShader(L"shader\\particle_update.fx", "CS_ParticleUpdate");
+	AddRes(pCS->GetKey(), pCS);
+
+	// Animation Matrix Update ½¦ÀÌ´õ
+	pCS = new CAnimation3DShader(256, 1, 1);
+	pCS->SetKey(L"Animation3DUpdateCS");
+	pCS->CreateComputeShader(L"shader\\animation3d.fx", "CS_Animation3D");
 	AddRes(pCS->GetKey(), pCS);
 }
 

@@ -15,7 +15,7 @@ CMotionBlur::CMotionBlur() :
 	m_pMotionBlur(nullptr)
 {
 	SetName(L"MotionBlur");
-	create_mesh();
+	
 
 	//MeshRender()->GetMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex"));
 }
@@ -23,6 +23,11 @@ CMotionBlur::CMotionBlur() :
 CMotionBlur::~CMotionBlur()
 {
 	
+}
+
+void CMotionBlur::Initialize()
+{
+	create_mesh();
 }
 
 
@@ -35,19 +40,11 @@ void CMotionBlur::finaltick()
 	//
 	//}
 
-	
-	
-	Vec3 vPostion = Transform()->GetRelativePos();
-	m_pMotionBlur->Transform()->SetRelativePos(vPostion);
-	
 	Vec3 vScale = Transform()->GetRelativeScale();
 	m_pMotionBlur->Transform()->SetRelativeScale(vScale);
-	
-	//
-	//Vec3 vRatio = vDir.Normalize();
-	//Vec3 vAddScale = vScale * vRatio;
-	//vAddScale *= 0.1f;
-	
+
+	Vec3 vPostion = Transform()->GetRelativePos();
+	m_pMotionBlur->Transform()->SetRelativePos(vPostion);
 }
 
 void CMotionBlur::create_mesh()
@@ -58,9 +55,12 @@ void CMotionBlur::create_mesh()
 	m_pMotionBlur->AddComponent(new CTransform);
 	m_pMotionBlur->AddComponent(new CMeshRender);
 
-	m_pMotionBlur->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	//CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh")
+	Ptr<CMesh> pMesh = MeshRender()->GetMesh();
+	m_pMotionBlur->MeshRender()->SetMesh(pMesh);
 	m_pMotionBlur->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MotionBlurMtrl"),0);
 
+	
 	SpawnGameObject(m_pMotionBlur, Vec3(0.f,0.f,0.f), (UINT)LAYER_TYPE::Default);
 }
 

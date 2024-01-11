@@ -181,6 +181,12 @@
     <ClInclude Include="CMeshData.h">
       <Filter>Source\07. Resource\7.FBX</Filter>
     </ClInclude>
+    <ClInclude Include="CAnimation3DShader.h">
+      <Filter>Source\06. Component\3DAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimator3D.h">
+      <Filter>Source\06. Component\3DAnimation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -354,6 +360,12 @@
     <ClCompile Include="CMeshData.cpp">
       <Filter>Source\07. Resource\7.FBX</Filter>
     </ClCompile>
+    <ClCompile Include="CAnimation3DShader.cpp">
+      <Filter>Source\06. Component\3DAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimator3D.cpp">
+      <Filter>Source\06. Component\3DAnimation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -512,6 +524,9 @@
     <Filter Include="Source\07. Resource\7.FBX">
       <UniqueIdentifier>{b080246f-d32b-4b62-bde8-5063ac44a634}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\06. Component\3DAnimation">
+      <UniqueIdentifier>{31276897-53ba-4161-b58c-f698a4f4119b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -572,6 +587,9 @@
       <Filter>Source\08. ShaderCode</Filter>
     </FxCompile>
     <FxCompile Include="middle.fx">
+      <Filter>Source\08. ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="animation3d.fx">
       <Filter>Source\08. ShaderCode</Filter>
     </FxCompile>
   </ItemGroup>
