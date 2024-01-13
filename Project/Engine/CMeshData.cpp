@@ -71,7 +71,7 @@ vector<Ptr<CMeshData>> CMeshData::LoadFromFBX(const wstring& _strFilePath)
 		{
 			wstring strMeshKey = L"mesh\\";
 			strMeshKey += path(strFullPath).stem();
-			strMeshKey += (wchar_t)i;
+			strMeshKey += std::to_wstring(i);
 			strMeshKey += L".mesh";
 			CResMgr::GetInst()->AddRes<CMesh>(strMeshKey, pMesh);
 

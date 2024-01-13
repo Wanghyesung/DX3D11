@@ -44,7 +44,7 @@ public:
 
     Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
 
-    Ptr<CMeshData> LoadFBX(const wstring& _strPath);
+    vector<Ptr<CMeshData>> LoadFBX(const wstring& _strPath);
 
     bool IsResourceChanged() { return m_Changed; }
 

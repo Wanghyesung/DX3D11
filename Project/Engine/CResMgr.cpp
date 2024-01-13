@@ -78,23 +78,40 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, ComPtr<ID3D11Textur
 	return pTex;
 }
 
-Ptr<CMeshData> CResMgr::LoadFBX(const wstring& _strPath)
+vector<Ptr<CMeshData>> CResMgr::LoadFBX(const wstring& _strPath)
 {
 	wstring strFileName = path(_strPath).stem();
 
-	wstring strName = L"meshdata\\";
-	strName += strFileName + L".mdat";
-
-	Ptr<CMeshData> pMeshData = FindRes<CMeshData>(strName);
-
-	if (nullptr != pMeshData)
-		return pMeshData;
-
 	vector<Ptr<CMeshData>> vecMeshData = {};
+
+	int i = 0;
+	while (TRUE)
+	{
+		wstring strNum = std::to_wstring(i);
+		wstring strFileNum = strFileName + strNum;
+		wstring strName = L"meshdata\\" + strFileNum + L".mdat";
+		
+		Ptr<CMeshData> pMeshData = FindRes<CMeshData>(strName);
+
+		if (nullptr != pMeshData)
+			vecMeshData.push_back(pMeshData);
+		else
+			break;
+
+		++i;
+	}
+
+	if (vecMeshData.size() != 0)
+		return vecMeshData;
+
 	//fbx에 구한 메쉬정보와 인덱스 정보, 메테리얼 정보를 통해 meshdata객체를 반환
 	vecMeshData = CMeshData::LoadFromFBX(_strPath);
-	for (int i = 0; i < vecMeshData.size(); ++i)
+	for (i = 0; i < vecMeshData.size(); ++i)
 	{
+		wstring strNum = std::to_wstring(i);
+		wstring strFileNum = strFileName + strNum;
+		wstring strName = L"meshdata\\" + strFileNum + L".mdat";
+
 		vecMeshData[i]->SetKey(strName);
 		vecMeshData[i]->SetRelativePath(strName);
 
@@ -107,7 +124,7 @@ Ptr<CMeshData> CResMgr::LoadFBX(const wstring& _strPath)
 	//pMeshData->SetKey(strName);
 	//pMeshData->SetRelativePath(strName);
 
-	return vecMeshData[0];
+	return vecMeshData;
 }
 
 

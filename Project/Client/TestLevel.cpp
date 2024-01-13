@@ -6,7 +6,6 @@
 #include <Engine\CLayer.h>
 #include <Engine\CGameObject.h>
 #include <Engine\components.h>
-#include <Engine\CMotionBlur.h>
 
 #include <Engine\CResMgr.h>
 #include <Engine\CCollisionMgr.h>
@@ -170,7 +169,7 @@ void CreateTestLevel()
 	// FBX Loading
 	// ============	
 	{
-		Ptr<CMeshData> pMeshData = nullptr;
+		vector<Ptr<CMeshData>> vecMeshData = {};
 		CGameObject* pObj = nullptr;
 
 		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\house.fbx");
@@ -178,14 +177,47 @@ void CreateTestLevel()
 		//pObj = pMeshData->Instantiate();
 		//pObj->SetName(L"House");
 
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\monster.fbx");
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"meshdata\\monster.mdat", L"meshdata\\monster.mdat");
-		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\monster.mdat");
-		pObj = pMeshData->Instantiate();
-		pObj->SetName(L"Monster");
+		for (int i = 0; i < 16; ++i)
+		{
+			wstring strNum = std::to_wstring(i);
+			Ptr<CMeshData> pMeshData =
+				CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\Artorias4" + strNum + L".mdat");
+			if (pMeshData != nullptr)
+			{
+				pObj = pMeshData->Instantiate();
+				pObj->SetName(L"Artorias4" + strNum);
 
-		pObj->Transform()->SetRelativeScale(10.f, 10.f, 10.f);
-		SpawnGameObject(pObj, Vec3(0.f, 0.f, 100.f), L"Default");
+				pObj->Transform()->SetRelativeScale(2.f, 2.f, 2.f);
+				pObj->Transform()->SetRelativeRot(-XM_PI / 2.f, 0.f, 0.f);
+				SpawnGameObject(pObj, Vec3(0.f, 0.f, 100.f), L"Default");
+
+				pObj->Animator3D()->CreateAnimationF(L"Idel", 0, 70);
+				pObj->Animator3D()->CreateAnimationF(L"Walk_Front", 71, 130);
+				pObj->Animator3D()->CreateAnimationF(L"Walk_Back", 133, 192);
+				pObj->Animator3D()->CreateAnimationF(L"Walk_Left", 193, 253);
+				pObj->Animator3D()->CreateAnimationF(L"Walk_Right", 254, 314);
+				
+				pObj->Animator3D()->Play(L"Walk_Front",true);
+
+			}
+				
+		}
+		//vecMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Artorias4.fbx");
+		//
+		//for (int i = 0; i < vecMeshData.size(); ++i)
+		//{
+		//	wstring strNum = std::to_wstring(i);
+		//	vecMeshData[i] = CResMgr::GetInst()->Load<CMeshData>(L"meshdata\\Artorias4" + strNum + L".mdat"
+		//		, L"meshdata\\Artorias4" + strNum + L".mdat");
+		//
+		//	pObj = vecMeshData[i]->Instantiate();
+		//	pObj->SetName(L"Artorias4" + strNum);
+		//
+		//	pObj->Transform()->SetRelativeScale(2.f, 2.f, 2.f);
+		//	//pObj->Transform()->SetRelativeRot()
+		//	SpawnGameObject(pObj, Vec3(0.f, 0.f, 100.f), L"Default");
+		//}
+		
 	}
 
 	//pObject = new CGameObject;

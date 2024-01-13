@@ -187,6 +187,9 @@
     <ClInclude Include="CAnimator3D.h">
       <Filter>Source\06. Component\3DAnimation</Filter>
     </ClInclude>
+    <ClInclude Include="CAnimation3D.h">
+      <Filter>Source\06. Component\3DAnimation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -364,6 +367,9 @@
       <Filter>Source\06. Component\3DAnimation</Filter>
     </ClCompile>
     <ClCompile Include="CAnimator3D.cpp">
+      <Filter>Source\06. Component\3DAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimation3D.cpp">
       <Filter>Source\06. Component\3DAnimation</Filter>
     </ClCompile>
   </ItemGroup>

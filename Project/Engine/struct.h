@@ -207,14 +207,14 @@ struct tMTAnimClip
 	wstring			strAnimName;
 	int				iStartFrame;
 	int				iEndFrame;
-	int				iFrameLength;
+	int				iFrameLength; 
 
-	double			dStartTime;
-	double			dEndTime;
-	double			dTimeLength;
+	double			dStartTime; //처음 시간
+	double			dEndTime; //끝 시간
+	double			dTimeLength; //전체 시간
 	float			fUpdateTime; // 이거 안씀
 
-	FbxTime::EMode	eMode;
+	FbxTime::EMode	eMode; //30프레임
 };
 
 // ===================

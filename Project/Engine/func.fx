@@ -230,6 +230,7 @@ void Skinning(inout float3 _vPos, inout float3 _vTangent, inout float3 _vBinorma
         if (0.f == _vWeight[i])
             continue;
 
+        //해당 인덱스i의 본 행렬 
         matrix matBone = GetBoneMat((int) _vIndices[i], _iRowIdx);
 
         info.vPos += (mul(float4(_vPos, 1.f), matBone) * _vWeight[i]).xyz;

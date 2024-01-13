@@ -10,6 +10,7 @@
 #include "CSkyBox.h"
 #include "CCamera.h"
 #include "CAnimator2D.h"
+#include "CAnimator3D.h"
 #include "CDecal.h"
 #include "CMotionBlur.h"
 

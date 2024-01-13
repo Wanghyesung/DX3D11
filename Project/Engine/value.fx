@@ -108,7 +108,7 @@ StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t12);
 StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t13);
 
 //Animation3D Bone Matrix Buffer
-//전체 애니메이션에 해당하는 뼈 행렬을 담은 버퍼
+//이번 프레임에 동작하는 뼈 행렬
 StructuredBuffer<Matrix> g_arrBoneMat : register(t30);
 
 SamplerState g_sam_0 : register(s0);//포인트

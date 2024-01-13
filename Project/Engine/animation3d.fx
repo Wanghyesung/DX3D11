@@ -207,6 +207,7 @@ struct tFrameTrans
     float4 qRot;
 };
 
+//ÀüÃ¼ »À
 StructuredBuffer<tFrameTrans> g_arrFrameTrans : register(t16);
 StructuredBuffer<matrix> g_arrOffset : register(t17);
 RWStructuredBuffer<matrix> g_arrFinelMat : register(u0);

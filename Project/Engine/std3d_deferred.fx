@@ -102,23 +102,23 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in)
         //output.vDiffuse.a = 1.f;
     }
     
-    //if (g_btex_1)
-    //{
-    //
-    //    float3 vNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;
-    //    
-    //    // 0 ~ 1 범위의 값을 -1 ~ 1 로 확장        
-    //    vNormal = vNormal * 2.f - 1.f;
-    //    
-    //    float3x3 vRotateMat =
-    //    {
-    //        _in.vViewTangent,
-    //        -_in.vViewBinormal,
-    //        _in.vViewNormal        
-    //    };
-    //    
-    //    vViewNormal = normalize(mul(vNormal, vRotateMat));
-    //}
+    if (g_btex_1)
+    {
+    
+        float3 vNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;
+        
+        // 0 ~ 1 범위의 값을 -1 ~ 1 로 확장        
+        vNormal = vNormal * 2.f - 1.f;
+        
+        float3x3 vRotateMat =
+        {
+            _in.vViewTangent,
+            -_in.vViewBinormal,
+            _in.vViewNormal        
+        };
+        
+        vViewNormal = normalize(mul(vNormal, vRotateMat));
+    }
     
     output.vNormal = float4(vViewNormal, 1.f);
     output.vPosition = float4(_in.vViewPos, 1.f);
@@ -132,7 +132,7 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in)
     output.vData.y = _in.vDepth;
    
     //재질계수
-    output.vColor.a = saturate(SpecCoeff);
+    output.vColor.a = 0.5f; //saturate(SpecCoeff);
     
     return output;
 }
