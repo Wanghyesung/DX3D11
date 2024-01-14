@@ -147,7 +147,9 @@ void CAnimator3D::CreateAnimationF(const wstring& _strAnimName, int _iStartFrame
 		return;
 
 	pAnim = new CAnimation3D;
-	
+	Events* tEvent = {};
+	m_mapAnimEvent.insert(make_pair(_strAnimName, tEvent));
+
 	//pAnim->m_bRepeat = _bRepeat;
 
 	pAnim->m_iStartFrame = _iStartFrame;

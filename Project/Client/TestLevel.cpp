@@ -191,17 +191,33 @@ void CreateTestLevel()
 				pObj->Transform()->SetRelativeRot(-XM_PI / 2.f, 0.f, 0.f);
 				SpawnGameObject(pObj, Vec3(0.f, 0.f, 100.f), L"Default");
 
-				pObj->Animator3D()->CreateAnimationF(L"Idel", 0, 70);
+				pObj->Animator3D()->CreateAnimationF(L"Idel", 0, 69);
 				pObj->Animator3D()->CreateAnimationF(L"Walk_Front", 71, 130);
-				pObj->Animator3D()->CreateAnimationF(L"Walk_Back", 133, 192);
-				pObj->Animator3D()->CreateAnimationF(L"Walk_Left", 193, 253);
-				pObj->Animator3D()->CreateAnimationF(L"Walk_Right", 254, 314);
-				
-				pObj->Animator3D()->Play(L"Walk_Front",true);
+				pObj->Animator3D()->CreateAnimationF(L"Walk_Back", 133, 191);
+				pObj->Animator3D()->CreateAnimationF(L"Walk_Left", 193, 252);
+				pObj->Animator3D()->CreateAnimationF(L"Walk_Right", 254, 313);
+				pObj->Animator3D()->CreateAnimationF(L"Run_Front", 315, 334);
+				pObj->Animator3D()->CreateAnimationF(L"Roll_Front", 336, 376);
+				pObj->Animator3D()->CreateAnimationF(L"Roll_Back", 377, 417);
+				pObj->Animator3D()->CreateAnimationF(L"Roll_Left", 419, 458);
+				pObj->Animator3D()->CreateAnimationF(L"Roll_Right", 460, 499);
+				pObj->Animator3D()->CreateAnimationF(L"Attack0", 501, 599);
+				pObj->Animator3D()->CreateAnimationF(L"Attack1", 601, 691);
+				pObj->Animator3D()->CreateAnimationF(L"Attack2", 693, 792);
+				pObj->Animator3D()->CreateAnimationF(L"Attack3", 794, 881);
+				pObj->Animator3D()->CreateAnimationF(L"Attack4", 882, 981);
+				pObj->Animator3D()->CreateAnimationF(L"Attack5", 982, 1098);
+				pObj->Animator3D()->CreateAnimationF(L"Jump", 1099, 1212);
+				pObj->Animator3D()->CreateAnimationF(L"Attack6", 1214, 1289);
+				pObj->Animator3D()->CreateAnimationF(L"Attack7", 1290, 1363);
+				pObj->Animator3D()->CreateAnimationF(L"Dead", 1465, 1685);
 
+				pObj->Animator3D()->Play(L"Dead", true);
+
+				//pObj->Animator3D()->StartEvent() = std::bind(std::bind(&SkillLuck::create_luck, this)
 			}
-				
 		}
+		
 		//vecMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Artorias4.fbx");
 		//
 		//for (int i = 0; i < vecMeshData.size(); ++i)
