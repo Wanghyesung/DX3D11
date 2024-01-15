@@ -190,6 +190,21 @@
     <ClInclude Include="CAnimation3D.h">
       <Filter>Source\06. Component\3DAnimation</Filter>
     </ClInclude>
+    <ClInclude Include="CFSM.h">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CIdleState.h">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CState.h">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CWalkState.h">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CRunState.h">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -372,6 +387,21 @@
     <ClCompile Include="CAnimation3D.cpp">
       <Filter>Source\06. Component\3DAnimation</Filter>
     </ClCompile>
+    <ClCompile Include="CFSM.cpp">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CIdleState.cpp">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CState.cpp">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CWalkState.cpp">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CRunState.cpp">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -532,6 +562,9 @@
     </Filter>
     <Filter Include="Source\06. Component\3DAnimation">
       <UniqueIdentifier>{31276897-53ba-4161-b58c-f698a4f4119b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\09. Module\FSM">
+      <UniqueIdentifier>{34a1bc0e-becf-472e-acf8-f2a95e5f307a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

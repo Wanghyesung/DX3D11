@@ -1,8 +1,9 @@
 #pragma once
+#include "CEntity.h"
 #include "CAnimator3D.h"
 
 
-class CAnimation3D
+class CAnimation3D : public CEntity
 {
 private:
 	wstring m_strName;
@@ -32,6 +33,8 @@ public:
 	bool IsComplete();
 
 	void Reset();
+
+	CLONE(CAnimation3D);
 public:
 	CAnimation3D();
 	~CAnimation3D();

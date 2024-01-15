@@ -21,6 +21,10 @@ void DestroyObject(CGameObject* _DeletObject);
 
 bool IsValidObj(CGameObject*& _Target);
 
+// State Chanage
+class CFSM;
+void ChanageState(CFSM* _pFSM, STATE_TYPE _eNextType);
+ 
 // DrawDebugShape
 void DrawDebugRect(Vec3 _vWorldPos, Vec2 _vWorldScale, Vec4 _vColor, Vec3 _vRotation, float _fTime = 0.f, bool DepthTest = false);
 void DrawDebugRect(const Matrix& _matWorld, Vec4 _vColor, float _fTime = 0.f, bool DepthTest = false);

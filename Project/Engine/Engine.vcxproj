@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -205,8 +205,10 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CFBXLoader.h" />
     <ClInclude Include="CFontMgr.h" />
     <ClInclude Include="CFrustum.h" />
+    <ClInclude Include="CFSM.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGraphicsShader.h" />
+    <ClInclude Include="CIdleState.h" />
     <ClInclude Include="CKeyMgr.h" />
     <ClInclude Include="CLayer.h" />
     <ClInclude Include="CLevel.h" />
@@ -229,17 +231,20 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CRes.h" />
     <ClInclude Include="CResMgr.h" />
     <ClInclude Include="CRigidbody.h" />
+    <ClInclude Include="CRunState.h" />
     <ClInclude Include="CScript.h" />
     <ClInclude Include="CSetColorShader.h" />
     <ClInclude Include="CShader.h" />
     <ClInclude Include="CSingleton.h" />
     <ClInclude Include="CSkyBox.h" />
     <ClInclude Include="CSound.h" />
+    <ClInclude Include="CState.h" />
     <ClInclude Include="CStructuredBuffer.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTileMap.h" />
     <ClInclude Include="CTimeMgr.h" />
     <ClInclude Include="CTransform.h" />
+    <ClInclude Include="CWalkState.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="func.h" />
@@ -273,8 +278,10 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CFBXLoader.cpp" />
     <ClCompile Include="CFontMgr.cpp" />
     <ClCompile Include="CFrustum.cpp" />
+    <ClCompile Include="CFSM.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGraphicsShader.cpp" />
+    <ClCompile Include="CIdleState.cpp" />
     <ClCompile Include="CKeyMgr.cpp" />
     <ClCompile Include="CLayer.cpp" />
     <ClCompile Include="CLevel.cpp" />
@@ -298,16 +305,19 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CResMgr.cpp" />
     <ClCompile Include="CResMgr_Init.cpp" />
     <ClCompile Include="CRigidbody.cpp" />
+    <ClCompile Include="CRunState.cpp" />
     <ClCompile Include="CScript.cpp" />
     <ClCompile Include="CSetColorShader.cpp" />
     <ClCompile Include="CShader.cpp" />
     <ClCompile Include="CSkyBox.cpp" />
     <ClCompile Include="CSound.cpp" />
+    <ClCompile Include="CState.cpp" />
     <ClCompile Include="CStructuredBuffer.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTileMap.cpp" />
     <ClCompile Include="CTimeMgr.cpp" />
     <ClCompile Include="CTransform.cpp" />
+    <ClCompile Include="CWalkState.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="extern.cpp" />
     <ClCompile Include="func.cpp" />

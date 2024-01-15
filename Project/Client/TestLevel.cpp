@@ -6,6 +6,10 @@
 #include <Engine\CLayer.h>
 #include <Engine\CGameObject.h>
 #include <Engine\components.h>
+#include <Engine\CFSM.h>
+#include <Engine\CIdleState.h>
+#include <Engine\CWalkState.h>
+#include <Engine\CRunState.h>
 
 #include <Engine\CResMgr.h>
 #include <Engine\CCollisionMgr.h>
@@ -17,7 +21,7 @@
 #include "CLevelSaveLoad.h"
 
 #include <Engine\CCollisionMgr.h>
-#include <Engine/CSetColorShader.h>
+#include <Engine\CSetColorShader.h>
 
 
 void CreateTestLevel()
@@ -58,8 +62,6 @@ void CreateTestLevel()
 	pPlayer->SetName(L"Player");
 	pPlayer->AddComponent(new CTransform);
 	pPlayer->AddComponent(new CMeshRender);
-	pPlayer->AddComponent(new CPlayerScript);
-	pPlayer->AddComponent(new CRigidbody);
 	//pPlayer->AddComponent(new CCollider3D);
 	
 
@@ -80,34 +82,6 @@ void CreateTestLevel()
 
 	SpawnGameObject(pPlayer, Vec3(0.f, 2000.f, 0.f), (int)LAYER_TYPE::Player);
 	
-	// Main Camera Object 생성
-	CGameObject* pMainCam = new CGameObject;
-	pMainCam->SetName(L"MainCamera");
-
-	CCameraMoveScript* pCameraScript = new CCameraMoveScript();
-	pCameraScript->SetTarget(pPlayer); //카메라가 바라보는 물체 등록
-	pMainCam->AddComponent(pCameraScript);
-	pMainCam->AddComponent(new CTransform);
-	pMainCam->AddComponent(new CCamera);
-
-	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pMainCam->Camera()->SetCameraIndex((int)CAMERA_TYPE::MAIN);		// MainCamera 로 설정
-	pMainCam->Camera()->SetLayerMaskAll(true);	// 모든 레이어 체크
-	pMainCam->Camera()->SetLayerMask((int)LAYER_TYPE::UI, false);// UI Layer 는 렌더링하지 않는다.
-
-	SpawnGameObject(pMainCam, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Camera);
-
-	// UI cameara
-	CGameObject* pUICam = new CGameObject;
-	pUICam->SetName(L"UICamera");
-	pUICam->AddComponent(new CTransform);
-	pUICam->AddComponent(new CCamera);
-	
-	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
-	pUICam->Camera()->SetCameraIndex((int)CAMERA_TYPE::UI);		// Sub 카메라로 지정
-	pUICam->Camera()->SetLayerMask((int)LAYER_TYPE::UI, true);	// 31번 레이어만 체크
-	
-	SpawnGameObject(pUICam, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Camera);
 
 	//skybox 추가
 	CGameObject* pSkyBox = new CGameObject();
@@ -165,6 +139,9 @@ void CreateTestLevel()
 
 	SpawnGameObject(pObject, Vec3(0.f, -1000.f, 0.f), L"Default");
 
+	CGameObject* pAritorias = new CGameObject;
+	pAritorias->SetName(L"Aritorias");
+	pAritorias->AddComponent(new CTransform());
 	// ============
 	// FBX Loading
 	// ============	
@@ -186,12 +163,9 @@ void CreateTestLevel()
 			{
 				pObj = pMeshData->Instantiate();
 				pObj->SetName(L"Artorias4" + strNum);
+				pAritorias->AddChild(pObj);
 
-				pObj->Transform()->SetRelativeScale(2.f, 2.f, 2.f);
-				pObj->Transform()->SetRelativeRot(-XM_PI / 2.f, 0.f, 0.f);
-				SpawnGameObject(pObj, Vec3(0.f, 0.f, 100.f), L"Default");
-
-				pObj->Animator3D()->CreateAnimationF(L"Idel", 0, 69);
+				pObj->Animator3D()->CreateAnimationF(L"Idle", 0, 69);
 				pObj->Animator3D()->CreateAnimationF(L"Walk_Front", 71, 130);
 				pObj->Animator3D()->CreateAnimationF(L"Walk_Back", 133, 191);
 				pObj->Animator3D()->CreateAnimationF(L"Walk_Left", 193, 252);
@@ -212,29 +186,61 @@ void CreateTestLevel()
 				pObj->Animator3D()->CreateAnimationF(L"Attack7", 1290, 1363);
 				pObj->Animator3D()->CreateAnimationF(L"Dead", 1465, 1685);
 
-				pObj->Animator3D()->Play(L"Dead", true);
-
+				pObj->Animator3D()->Play(L"Idle", true);
 				//pObj->Animator3D()->StartEvent() = std::bind(std::bind(&SkillLuck::create_luck, this)
 			}
 		}
+		SpawnGameObject(pAritorias, Vec3(0.f, 0.f, 100.f), L"Default");
+		pAritorias->Transform()->SetRelativeScale(2.f, 2.f, 2.f);
+		pAritorias->Transform()->SetRelativeRot(-XM_PI / 2.f, 0.f, 0.f);
+		CPlayerScript* pScript = new CPlayerScript();
+		pAritorias->AddComponent(pScript);
+
+		CFSM* pFSM = new CFSM();
+		pScript->SetFSM(pFSM);
+
+		CIdleState* pIdle = new CIdleState();
+		pIdle->SetName(L"Idle");
+		pFSM->AddState(STATE_TYPE::IDLE, pIdle);
 		
-		//vecMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\Artorias4.fbx");
-		//
-		//for (int i = 0; i < vecMeshData.size(); ++i)
-		//{
-		//	wstring strNum = std::to_wstring(i);
-		//	vecMeshData[i] = CResMgr::GetInst()->Load<CMeshData>(L"meshdata\\Artorias4" + strNum + L".mdat"
-		//		, L"meshdata\\Artorias4" + strNum + L".mdat");
-		//
-		//	pObj = vecMeshData[i]->Instantiate();
-		//	pObj->SetName(L"Artorias4" + strNum);
-		//
-		//	pObj->Transform()->SetRelativeScale(2.f, 2.f, 2.f);
-		//	//pObj->Transform()->SetRelativeRot()
-		//	SpawnGameObject(pObj, Vec3(0.f, 0.f, 100.f), L"Default");
-		//}
-		
+		CWalkState* pWalk = new CWalkState();
+		pIdle->SetName(L"Walk_");
+		pFSM->AddState(STATE_TYPE::WALK, pWalk);
+
+		pFSM->SetState(STATE_TYPE::IDLE);
+		ChanageState(pFSM, STATE_TYPE::IDLE);
 	}
+
+	// Main Camera Object 생성
+	CGameObject* pMainCam = new CGameObject;
+	pMainCam->SetName(L"MainCamera");
+
+	CCameraMoveScript* pCameraScript = new CCameraMoveScript();
+	pCameraScript->SetTarget(pAritorias); //카메라가 바라보는 물체 등록
+	pMainCam->AddComponent(pCameraScript);
+	pMainCam->AddComponent(new CTransform);
+	pMainCam->AddComponent(new CCamera);
+
+	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pMainCam->Camera()->SetCameraIndex((int)CAMERA_TYPE::MAIN);		// MainCamera 로 설정
+	pMainCam->Camera()->SetLayerMaskAll(true);	// 모든 레이어 체크
+	pMainCam->Camera()->SetLayerMask((int)LAYER_TYPE::UI, false);// UI Layer 는 렌더링하지 않는다.
+
+	SpawnGameObject(pMainCam, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Camera);
+
+	// UI cameara
+	CGameObject* pUICam = new CGameObject;
+	pUICam->SetName(L"UICamera");
+	pUICam->AddComponent(new CTransform);
+	pUICam->AddComponent(new CCamera);
+
+	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+	pUICam->Camera()->SetCameraIndex((int)CAMERA_TYPE::UI);		// Sub 카메라로 지정
+	pUICam->Camera()->SetLayerMask((int)LAYER_TYPE::UI, true);	// 31번 레이어만 체크
+
+	SpawnGameObject(pUICam, Vec3(0.f, 0.f, 0.f), (int)LAYER_TYPE::Camera);
+
+
 
 	//pObject = new CGameObject;
 	//pObject->SetName(L"Decal");

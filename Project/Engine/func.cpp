@@ -65,8 +65,18 @@ bool IsValidObj(CGameObject*& _Target)
 }
 
 
+void ChanageState(CFSM* _pFSM, STATE_TYPE _eNextType)
+{
+	tEvent evn = {};
 
-void DrawDebugRect(Vec3 _vWorldPos, Vec2 _vWorldScale, Vec4 _vColor, 
+	evn.Type = EVENT_TYPE::CHANAGE_STATE;
+	evn.wParam = (DWORD_PTR)_pFSM;
+	evn.lParam = (DWORD_PTR)_eNextType;
+
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
+void DrawDebugRect(Vec3 _vWorldPos, Vec2 _vWorldScale, Vec4 _vColor,
 	Vec3 _vRotation, float _fTime, bool DepthTest)
 {
 	tDebugShapeInfo info = {};

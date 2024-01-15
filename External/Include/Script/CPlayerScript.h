@@ -1,5 +1,6 @@
 #pragma once
 #include <Engine\CScript.h>
+class CFSM;
 
 class CPlayerScript :
     public CScript
@@ -7,7 +8,8 @@ class CPlayerScript :
 private:
     float       m_fSpeed;
 
-    int        m_iActive;
+    int         m_iActive;
+    CFSM*        m_pFSM;
 
 public:
     virtual void begin() override;
@@ -16,6 +18,8 @@ public:
     virtual void BeginOverlap(CCollider2D* _Other) override;
 
     void SetActive(bool _bActive){}
+
+    void SetFSM(CFSM* _pFSM);
 private:
     void Shoot();
 

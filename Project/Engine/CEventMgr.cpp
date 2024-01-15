@@ -6,7 +6,7 @@
 #include "CGameObject.h"
 #include "CResMgr.h"
 #include "CRenderMgr.h"
-
+#include "CFSM.h"
 
 CEventMgr::CEventMgr()
 {
@@ -101,6 +101,13 @@ void CEventMgr::tick()
 			m_LevelChanged = true;
 		}
 			break;		
+
+		case EVENT_TYPE::CHANAGE_STATE:
+		{
+			CFSM* pFSM = (CFSM*)m_vecEvent[i].wParam;
+			STATE_TYPE eType = (STATE_TYPE)m_vecEvent[i].lParam;
+			pFSM->ChanageState(eType);
+		}
 		}
 	}
 

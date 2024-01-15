@@ -6,11 +6,13 @@
 
 #include <Engine\CRenderMgr.h>
 #include <Engine\CRigidbody.h>
+#include <Engine\CFSM.h>
 
 CPlayerScript::CPlayerScript()
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_fSpeed(100.f)
 	, m_iActive(1)
+	, m_pFSM(nullptr)
 {
 	AddScriptParam(SCRIPT_PARAM::FLOAT, &m_fSpeed, "Player Speed");
 	AddScriptParam(SCRIPT_PARAM::INT, &m_iActive, "Player Active");
@@ -18,7 +20,8 @@ CPlayerScript::CPlayerScript()
 
 CPlayerScript::~CPlayerScript()
 {
-
+	if (nullptr != m_pFSM)
+		delete m_pFSM;
 }
 
 void CPlayerScript::begin()
@@ -31,55 +34,62 @@ void CPlayerScript::tick()
 	if (m_iActive == 0)
 		return;
 	
+	m_pFSM->final_tick();
 	//Vec3 vCurPos = Transform()->GetRelativePos();
 	
-	Vec3 vFoward = Transform()->GetRelativeDir(DIR_TYPE::FRONT);
-	Vec3 vUp = Transform()->GetRelativeDir(DIR_TYPE::UP);
-	Vec3 vRight = Transform()->GetRelativeDir(DIR_TYPE::RIGHT);
-
-	Vec3 vForce = Vec3::Zero;
-	if (KEY_PRESSED(KEY::LSHIFT))
-	{
-		m_fSpeed = 1600.f;
-	}
-	else
-	{
-		m_fSpeed = 800.f;
-	}
-
-	if (KEY_PRESSED(KEY::W))
-	{
-		vFoward *= m_fSpeed;
-		
-		vForce += vFoward;
-	}
-
-	else if (KEY_PRESSED(KEY::S))
-	{
-		
-		vFoward *= m_fSpeed;
-		
-		vForce -= vFoward;
-
-	}
-
-	if (KEY_PRESSED(KEY::A))
-	{
-		vRight *= m_fSpeed;
-		
-		vForce -= vRight;
-
-	}
-
-	else if (KEY_PRESSED(KEY::D))
-	{
-		vRight *= m_fSpeed;
-		
-		vForce += vRight;
-	}
-
-	Rigidbody()->AddForce(vForce);
+	//Vec3 vFoward = Transform()->GetRelativeDir(DIR_TYPE::FRONT);
+	//Vec3 vUp = Transform()->GetRelativeDir(DIR_TYPE::UP);
+	//Vec3 vRight = Transform()->GetRelativeDir(DIR_TYPE::RIGHT);
+	//
+	//Vec3 vForce = Vec3::Zero;
+	//if (KEY_PRESSED(KEY::LSHIFT))
+	//{
+	//	m_fSpeed = 1600.f;
+	//}
+	//else
+	//{
+	//	m_fSpeed = 800.f;
+	//}
+	//
+	//if (KEY_PRESSED(KEY::W))
+	//{
+	//	vFoward *= m_fSpeed;
+	//	
+	//	vForce += vFoward;
+	//}
+	//
+	//else if (KEY_PRESSED(KEY::S))
+	//{
+	//	
+	//	vFoward *= m_fSpeed;
+	//	
+	//	vForce -= vFoward;
+	//
+	//}
+	//
+	//if (KEY_PRESSED(KEY::A))
+	//{
+	//	vRight *= m_fSpeed;
+	//	
+	//	vForce -= vRight;
+	//
+	//}
+	//
+	//else if (KEY_PRESSED(KEY::D))
+	//{
+	//	vRight *= m_fSpeed;
+	//	
+	//	vForce += vRight;
+	//}
+	//
+	//Rigidbody()->AddForce(vForce);
 	//Transform()->SetRelativePos(vCurPos);
+}
+
+void CPlayerScript::SetFSM(CFSM* _pFSM)
+{
+	m_pFSM = _pFSM;
+	m_pFSM->SetOwner(GetOwner());
 }
 
 void CPlayerScript::Shoot()
