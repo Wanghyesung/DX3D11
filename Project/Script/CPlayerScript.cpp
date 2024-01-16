@@ -140,13 +140,13 @@ void CPlayerScript::Initialize()
 			pObj->Animator3D()->CreateAnimationF(L"Roll_Left", 419, 458);
 			pObj->Animator3D()->CreateAnimationF(L"Roll_Right", 460, 499);
 			pObj->Animator3D()->CreateAnimationF(L"Attack0", 501, 599);
-			pObj->Animator3D()->CreateAnimationF(L"Attack1", 601, 691);
+			pObj->Animator3D()->CreateAnimationF(L"Attack1", 601, 690);
 			pObj->Animator3D()->CreateAnimationF(L"Attack2", 693, 792);
-			pObj->Animator3D()->CreateAnimationF(L"Attack3", 794, 881);
-			pObj->Animator3D()->CreateAnimationF(L"Attack4", 882, 981);
-			pObj->Animator3D()->CreateAnimationF(L"Attack5", 982, 1098);
+			pObj->Animator3D()->CreateAnimationF(L"Attack3", 794, 879);
+			//pObj->Animator3D()->CreateAnimationF(L"Attack4", 882, 981);
+			pObj->Animator3D()->CreateAnimationF(L"Attack5", 982, 1097);
 			pObj->Animator3D()->CreateAnimationF(L"Jump", 1099, 1212);
-			pObj->Animator3D()->CreateAnimationF(L"Attack6", 1214, 1289);
+			pObj->Animator3D()->CreateAnimationF(L"Attack6", 1214, 1287);
 			pObj->Animator3D()->CreateAnimationF(L"Attack7", 1290, 1363);
 			pObj->Animator3D()->CreateAnimationF(L"Dead", 1465, 1685);
 
@@ -196,13 +196,47 @@ void CPlayerScript::set_attack()
 	pAttack->SetName(L"Attack");
 	m_pFSM->AddState(STATE_TYPE::ATTACK, pAttack);
 
-	Vec3 vFront = GetOwner()->Transform()->GetRelativeDir(DIR_TYPE::UP);
+	//Vec3 vFront = GetOwner()->Transform()->GetRelativeDir(DIR_TYPE::UP);
 	
 	tAttackInfo attack0 = {};
-	attack0.vForce = vFront * 400.f;
+	attack0.fForce = 10.f;
 	attack0.iAttackNum = 0;
-
 	pAttack->AddAttack(attack0);
+
+	tAttackInfo attack1 = {};
+	attack1.fForce = 10.f;
+	attack1.iAttackNum = 1;
+	pAttack->AddAttack(attack1);
+
+	tAttackInfo attack2 = {};
+	attack2.iAttackNum = 2;
+	attack2.fForce = 10.f;
+	pAttack->AddAttack(attack2);
+
+	tAttackInfo attack3 = {};
+	attack3.fForce = 10.f;
+	attack3.iAttackNum = 3;
+	pAttack->AddAttack(attack3);
+
+	tAttackInfo attack4 = {};
+	attack4.fForce = 10.f;
+	attack4.iAttackNum = 4;
+	pAttack->AddAttack(attack4);
+
+	tAttackInfo attack5 = {};
+	attack5.fForce = 10.f;
+	attack5.iAttackNum = 5;
+	pAttack->AddAttack(attack5);
+
+	tAttackInfo attack6 = {};
+	attack6.fForce = 10.f;
+	attack6.iAttackNum = 6;
+	pAttack->AddAttack(attack6);
+
+	tAttackInfo attack7 = {};
+	attack7.fForce = 10.f;
+	attack7.iAttackNum = 7;
+	pAttack->AddAttack(attack7);
 }
 
 void CPlayerScript::rotate()

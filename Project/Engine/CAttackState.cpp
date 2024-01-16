@@ -4,6 +4,8 @@
 #include "CAnimator3D.h"
 #include "CAnimation3D.h"
 #include "CFSM.h"
+#include "CRigidbody.h"
+#include "CTransform.h"
 void CAttackState::final_tick()
 {
 	CGameObject* pChildObj = GetOwner()->GetChild().at(0);
@@ -14,10 +16,12 @@ void CAttackState::final_tick()
 		ChanageState(GetFSM(), STATE_TYPE::IDLE);
 		return;
 	}
+	
 }
 
 void CAttackState::Exit()
 {
+	GetOwner()->Rigidbody()->SetAcumulate(false);
 
 }
 
@@ -28,10 +32,19 @@ void CAttackState::Enter()
 	std::uniform_int_distribution<int> num(0, 7);
 	int iNum = (int)num(en);
 
-	m_strAttackNum = std::to_wstring(0);
+	m_strAttackNum = std::to_wstring(iNum);
+	
+	//юс╫ц
+	if (iNum == 4)
+		m_strAttackNum = L"0";
+
+	Vec3 vFront = GetOwner()->Transform()->GetRelativeDir(DIR_TYPE::UP);
+	vFront.y = 0.f;
+	GetOwner()->Rigidbody()->SetVelocity(vFront * -m_vecAttack[m_iCurAttack].fForce);
+	GetOwner()->Rigidbody()->SetAcumulate(true);
 
 	wstring strFinalAnim = GetName() + m_strAttackNum;
-	Chanage_Anim(strFinalAnim);
+	Chanage_Anim(strFinalAnim, false);
 }
 
 void CAttackState::AddAttack(tAttackInfo _tAttackInfo)
@@ -46,7 +59,8 @@ void CAttackState::AddAttack(tAttackInfo _tAttackInfo)
 
 CAttackState::CAttackState():
 	m_strAttackNum(L"0"),
-	m_vecAttack{}
+	m_vecAttack{},
+	m_iCurAttack(0)
 {
 
 }

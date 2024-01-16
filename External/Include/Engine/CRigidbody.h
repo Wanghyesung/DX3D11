@@ -27,7 +27,8 @@ public:
 	void SetMaxVelocity(Vector3 _vMax) { m_vMaxVelocity = _vMax; }
 
 	void AddForce(Vector3 _vForce) { m_vForce = _vForce; }
-
+	
+	void SetAcumulate(bool _bAcc) { m_bAccumulate = _bAcc; }
 private:
 	Vec3 m_vMaxVelocity;
 	Vec3 m_vVelocity;
@@ -36,6 +37,7 @@ private:
 
 	Vec3 m_vGravity;
 
+	bool m_bAccumulate;//힘들 누적해서 받을지
 	bool m_bGround;
 
 	float m_fMass;

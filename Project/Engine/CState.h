@@ -14,7 +14,7 @@ public:
 	virtual void Exit() = 0;
 	virtual void Enter() = 0;
 
-	void Chanage_Anim(const wstring& _strName);
+	void Chanage_Anim(const wstring& _strName, bool _bRepeat = true);
 
 	const STATE_TYPE& GetType() { return m_eType; }
 	void SetType(const STATE_TYPE& _eType) { m_eType = _eType; }

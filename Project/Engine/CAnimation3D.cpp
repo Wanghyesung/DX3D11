@@ -28,18 +28,21 @@ void CAnimation3D::final_tick()
 	
 	// 다음 프레임 인덱스
 	if (m_iCurFrame >= m_iEndFrame)
-		m_iNextFrame = m_iStartFrame;	// 끝이면 처음 위치를 다음 위치로
+	{
+		m_iNextFrame = m_iEndFrame;	// 끝이면 마지막 위치로
+	}
 	else
+	{
 		m_iNextFrame = m_iCurFrame + 1;
-
-	// 프레임간의 시간에 따른 비율을 구해준다.
+		// 프레임간의 시간에 따른 비율을 구해준다.
+	}
+	
 	m_fRatio = (float)(dFrameIdx - (double)m_iCurFrame);
-
 }
 
 bool CAnimation3D::IsComplete()
 {
-	if (m_fCurTime >= m_fEndTime)
+	if (m_iCurFrame >= m_iEndFrame)
 		return true;
 
 	return false;

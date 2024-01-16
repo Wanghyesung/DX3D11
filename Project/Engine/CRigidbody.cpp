@@ -9,7 +9,8 @@ CRigidbody::CRigidbody() :
 	m_vAccelation(Vec3::Zero),
 	m_vMaxVelocity(Vec3(500.f, 500.f, 500.f)),
 	m_vGravity(Vec3(0.f, -9.6f, 0.f)),
-	m_bGround(true)
+	m_bGround(true),
+	m_bAccumulate(false)
 {
 
 }
@@ -48,13 +49,16 @@ void CRigidbody::finaltick()
 	}
 	else
 	{
-		return;
+		m_vAccelation = Vec3::Zero;
 	}
 	
 
 	if (m_bGround)
 	{
-		m_vVelocity = (m_vAccelation * DT);
+		if(m_bAccumulate)
+			m_vVelocity += (m_vAccelation * DT);
+		else
+			m_vVelocity = (m_vAccelation * DT);
 
 		//³»Àû
 		Vec3 vGravity = m_vGravity;

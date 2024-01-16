@@ -73,7 +73,12 @@ void CWalkState::final_tick()
 	//vNewForce.y = vForce.z;
 	//vNewForce.z = vForce.y;
 
-	GetFSM()->SetDir(strDir);
+	if (GetFSM()->GetDir() != strDir)
+	{
+		GetFSM()->SetDir(strDir);
+		Enter();
+	}
+
 	pRigidbody->AddForce(vForce);
 }
 

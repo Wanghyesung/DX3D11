@@ -6,6 +6,7 @@
 #include "CRigidbody.h"
 #include "CTransform.h"
 #include "CKeyMgr.h"
+
 void CRollState::final_tick()
 {
 	CGameObject* pObj = GetOwner();
@@ -20,10 +21,24 @@ void CRollState::final_tick()
 		return;
 	}
 		
+}
+
+void CRollState::Exit()
+{
+	GetOwner()->Rigidbody()->SetAcumulate(false);
+}
+
+void CRollState::Enter()
+{
+	CGameObject* pObj = GetOwner();
+
+	wstring strFinalAnim = GetName() + GetFSM()->GetDir();
+	Chanage_Anim(strFinalAnim, false);
+
 	Vec3 vFoward = pObj->Transform()->GetRelativeDir(DIR_TYPE::UP);
 	Vec3 vRight = pObj->Transform()->GetRelativeDir(DIR_TYPE::RIGHT);
 
-	float fSpeed = 1000.f;
+	float fSpeed = 15.f;
 	Vec3 vForce = Vec3::Zero;
 
 	wstring strDir = GetFSM()->GetDir();
@@ -41,7 +56,7 @@ void CRollState::final_tick()
 		vForce -= vRight;
 	}
 
-	if (strDir == L"Front")
+	else if (strDir == L"Front")
 	{
 		vFoward *= fSpeed;
 
@@ -54,18 +69,9 @@ void CRollState::final_tick()
 		vForce += vFoward;
 	}
 
-	pObj->Rigidbody()->AddForce(vForce);
-}
-
-void CRollState::Exit()
-{
-
-}
-
-void CRollState::Enter()
-{
-	wstring strFinalAnim = GetName() + GetFSM()->GetDir();
-	Chanage_Anim(strFinalAnim);
+	vForce.y = 0.f;
+	pObj->Rigidbody()->SetVelocity(vForce);
+	pObj->Rigidbody()->SetAcumulate(true);
 }
 
 

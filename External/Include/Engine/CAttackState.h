@@ -6,7 +6,7 @@ struct tAttackInfo
 	int iAttackNum;
 
 	//공격할때 움직임
-	Vec3 vForce;
+	float fForce;
 	
 	//공격판정 시작프레임
 	int iStartFrame;
@@ -27,6 +27,9 @@ private:
 	wstring m_strAttackNum;
 	vector<tAttackInfo> m_vecAttack;
 	
+	UINT m_iCurAttack;
+
+
 public:
 	void AddAttack(tAttackInfo _tAttackInfo);
 
