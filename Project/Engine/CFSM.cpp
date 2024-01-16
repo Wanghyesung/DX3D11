@@ -23,6 +23,11 @@ CState* CFSM::FindState(STATE_TYPE _eType)
     return iter->second;
 }
 
+STATE_TYPE CFSM::GetCurStateType()
+{
+    return m_pCurState->GetType();
+}
+
 
 void CFSM::ChanageState(STATE_TYPE _eType)
 {
@@ -61,10 +66,18 @@ void CFSM::SetState(STATE_TYPE _eType)
     m_pCurState = pState;
 }
 
+void CFSM::AddAttack(tAttackInfo _tAttackInfo)
+{
+    CAttackState* pAttackState = dynamic_cast<CAttackState*>(FindState(STATE_TYPE::ATTACK));
+
+    pAttackState->AddAttack(_tAttackInfo);
+}
+
 CFSM::CFSM() :
     m_pOwner(nullptr),
     m_mapState{},
-    m_pCurState(nullptr)
+    m_pCurState(nullptr),
+    m_strDir(L"Front")
 {
 }
 

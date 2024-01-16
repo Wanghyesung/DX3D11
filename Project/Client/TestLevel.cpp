@@ -58,29 +58,29 @@ void CreateTestLevel()
 	pCurLevel->GetLayer(31)->SetName(L"ViewPort UI");
 
 	// 오브젝트 생성
-	CGameObject* pPlayer = new CGameObject;
-	pPlayer->SetName(L"Player");
-	pPlayer->AddComponent(new CTransform);
-	pPlayer->AddComponent(new CMeshRender);
-	//pPlayer->AddComponent(new CCollider3D);
-	
-
-	pPlayer->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1000.f));
-	pPlayer->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
-
-	//SphereMesh
-	pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pPlayer->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
-	pPlayer->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
-	pPlayer->MeshRender()->GetMaterial(0)->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
-	//pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
-	//pPlayer->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
-	//pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_CUBE_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\skybox\\SkyWater.dds"));
-
-	pPlayer->AddComponent(new CMotionBlur);
-	pPlayer->MotionBlur()->Initialize();
-
-	SpawnGameObject(pPlayer, Vec3(0.f, 2000.f, 0.f), (int)LAYER_TYPE::Player);
+	//CGameObject* pPlayer = new CGameObject;
+	//pPlayer->SetName(L"Player");
+	//pPlayer->AddComponent(new CTransform);
+	//pPlayer->AddComponent(new CMeshRender);
+	////pPlayer->AddComponent(new CCollider3D);
+	//
+	//
+	//pPlayer->Transform()->SetRelativeScale(Vec3(1000.f, 1000.f, 1000.f));
+	//pPlayer->Transform()->SetRelativeRot(Vec3(0.f, 0.f, 0.f));
+	//
+	////SphereMesh
+	//pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	//pPlayer->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3D_DeferredMtrl"),0);
+	//pPlayer->MeshRender()->GetMaterial(0)->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01.tga"));
+	//pPlayer->MeshRender()->GetMaterial(0)->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\tile\\TILE_01_N.tga"));
+	////pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CubeMesh"));
+	////pPlayer->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
+	////pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_CUBE_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\skybox\\SkyWater.dds"));
+	//
+	//pPlayer->AddComponent(new CMotionBlur);
+	//pPlayer->MotionBlur()->Initialize();
+	//
+	//SpawnGameObject(pPlayer, Vec3(0.f, 2000.f, 0.f), (int)LAYER_TYPE::Player);
 	
 
 	//skybox 추가
@@ -142,74 +142,11 @@ void CreateTestLevel()
 	CGameObject* pAritorias = new CGameObject;
 	pAritorias->SetName(L"Aritorias");
 	pAritorias->AddComponent(new CTransform());
-	// ============
-	// FBX Loading
-	// ============	
-	{
-		vector<Ptr<CMeshData>> vecMeshData = {};
-		CGameObject* pObj = nullptr;
-
-		//pMeshData = CResMgr::GetInst()->LoadFBX(L"fbx\\house.fbx");
-		//pMeshData = CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\house.mdat");
-		//pObj = pMeshData->Instantiate();
-		//pObj->SetName(L"House");
-
-		for (int i = 0; i < 16; ++i)
-		{
-			wstring strNum = std::to_wstring(i);
-			Ptr<CMeshData> pMeshData =
-				CResMgr::GetInst()->FindRes<CMeshData>(L"meshdata\\Artorias4" + strNum + L".mdat");
-			if (pMeshData != nullptr)
-			{
-				pObj = pMeshData->Instantiate();
-				pObj->SetName(L"Artorias4" + strNum);
-				pAritorias->AddChild(pObj);
-
-				pObj->Animator3D()->CreateAnimationF(L"Idle", 0, 69);
-				pObj->Animator3D()->CreateAnimationF(L"Walk_Front", 71, 130);
-				pObj->Animator3D()->CreateAnimationF(L"Walk_Back", 133, 191);
-				pObj->Animator3D()->CreateAnimationF(L"Walk_Left", 193, 252);
-				pObj->Animator3D()->CreateAnimationF(L"Walk_Right", 254, 313);
-				pObj->Animator3D()->CreateAnimationF(L"Run_Front", 315, 334);
-				pObj->Animator3D()->CreateAnimationF(L"Roll_Front", 336, 376);
-				pObj->Animator3D()->CreateAnimationF(L"Roll_Back", 377, 417);
-				pObj->Animator3D()->CreateAnimationF(L"Roll_Left", 419, 458);
-				pObj->Animator3D()->CreateAnimationF(L"Roll_Right", 460, 499);
-				pObj->Animator3D()->CreateAnimationF(L"Attack0", 501, 599);
-				pObj->Animator3D()->CreateAnimationF(L"Attack1", 601, 691);
-				pObj->Animator3D()->CreateAnimationF(L"Attack2", 693, 792);
-				pObj->Animator3D()->CreateAnimationF(L"Attack3", 794, 881);
-				pObj->Animator3D()->CreateAnimationF(L"Attack4", 882, 981);
-				pObj->Animator3D()->CreateAnimationF(L"Attack5", 982, 1098);
-				pObj->Animator3D()->CreateAnimationF(L"Jump", 1099, 1212);
-				pObj->Animator3D()->CreateAnimationF(L"Attack6", 1214, 1289);
-				pObj->Animator3D()->CreateAnimationF(L"Attack7", 1290, 1363);
-				pObj->Animator3D()->CreateAnimationF(L"Dead", 1465, 1685);
-
-				pObj->Animator3D()->Play(L"Idle", true);
-				//pObj->Animator3D()->StartEvent() = std::bind(std::bind(&SkillLuck::create_luck, this)
-			}
-		}
-		SpawnGameObject(pAritorias, Vec3(0.f, 0.f, 100.f), L"Default");
-		pAritorias->Transform()->SetRelativeScale(2.f, 2.f, 2.f);
-		pAritorias->Transform()->SetRelativeRot(-XM_PI / 2.f, 0.f, 0.f);
-		CPlayerScript* pScript = new CPlayerScript();
-		pAritorias->AddComponent(pScript);
-
-		CFSM* pFSM = new CFSM();
-		pScript->SetFSM(pFSM);
-
-		CIdleState* pIdle = new CIdleState();
-		pIdle->SetName(L"Idle");
-		pFSM->AddState(STATE_TYPE::IDLE, pIdle);
-		
-		CWalkState* pWalk = new CWalkState();
-		pIdle->SetName(L"Walk_");
-		pFSM->AddState(STATE_TYPE::WALK, pWalk);
-
-		pFSM->SetState(STATE_TYPE::IDLE);
-		ChanageState(pFSM, STATE_TYPE::IDLE);
-	}
+	pAritorias->AddComponent(new CRigidbody());
+	CPlayerScript* pScript = new CPlayerScript();
+	pAritorias->AddComponent(pScript);
+	pScript->Initialize(); //fbx load, FSM , components
+	SpawnGameObject(pAritorias, Vec3(0.f, 0.f, 100.f), L"Default");
 
 	// Main Camera Object 생성
 	CGameObject* pMainCam = new CGameObject;

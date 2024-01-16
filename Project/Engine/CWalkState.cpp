@@ -4,29 +4,21 @@
 #include "CGameObject.h"
 #include "CTransform.h"
 #include "CRigidbody.h"
-
+#include "CFSM.h"
 void CWalkState::final_tick()
 {
 	CGameObject* pObj = GetOwner();
 	CRigidbody* pRigidbody = pObj->Rigidbody();
-	Vec3 vCurPos = pObj->Transform()->GetRelativePos();
-
-	Vec3 vFoward = pObj->Transform()->GetRelativeDir(DIR_TYPE::FRONT);
-	Vec3 vUp = pObj->Transform()->GetRelativeDir(DIR_TYPE::UP);
+	
+	//z <--> y fbx축 
+	Vec3 vFoward = pObj->Transform()->GetRelativeDir(DIR_TYPE::UP);
+	Vec3 vUp = pObj->Transform()->GetRelativeDir(DIR_TYPE::FRONT);
 	Vec3 vRight = pObj->Transform()->GetRelativeDir(DIR_TYPE::RIGHT);
 
 	float fSpeed = 1000.f;
 	Vec3 vForce = Vec3::Zero;
 
 	wstring strDir = {};
-	if (KEY_PRESSED(KEY::W))
-	{
-		vFoward *= fSpeed;
-
-		vForce += vFoward;
-
-		strDir = L"Front";
-	}
 
 	if (KEY_PRESSED(KEY::D))
 	{
@@ -45,13 +37,27 @@ void CWalkState::final_tick()
 		strDir = L"Left";
 	}
 
-	if (KEY_PRESSED(KEY::S))
+	if (KEY_PRESSED(KEY::W))
 	{
 		vFoward *= fSpeed;
 
 		vForce -= vFoward;
 
+		strDir = L"Front";
+	}
+	else if (KEY_PRESSED(KEY::S))
+	{
+		vFoward *= fSpeed;
+
+		vForce += vFoward;
+
 		strDir = L"Back";
+	}
+
+	if (KEY_TAP(KEY::SPACE))
+	{
+		ChanageState(GetFSM(), STATE_TYPE::ROLL);
+		return;
 	}
 
 	if (vForce == Vec3::Zero)
@@ -60,13 +66,22 @@ void CWalkState::final_tick()
 		return;
 	}
 	
-	SetName(L"Walk_" + strDir);
+	//foward -> z축 y축 반전
+	//up->y축 z축 반전 - 1
+	//Vec3 vNewForce = {};
+	//vNewForce.x = vForce.x;
+	//vNewForce.y = vForce.z;
+	//vNewForce.z = vForce.y;
+
+	GetFSM()->SetDir(strDir);
 	pRigidbody->AddForce(vForce);
 }
 
 void CWalkState::Enter()
 {
-	Chanage_Anim(GetName());
+	wstring strFinalName = GetName() + GetFSM()->GetDir();
+
+	Chanage_Anim(strFinalName);
 }
 
 void CWalkState::Exit()

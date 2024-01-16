@@ -25,7 +25,7 @@ CTransform::~CTransform()
 }
 
 
-Vec3 CTransform::GetNewFoward()
+Vec3 CTransform::GetDynamicFoward()
 {
 	Matrix matRot = XMMatrixIdentity();
 	matRot = XMMatrixRotationX(m_vRelativeRot.x);
@@ -38,6 +38,18 @@ Vec3 CTransform::GetNewFoward()
 }
 
 
+
+Vec3 CTransform::GetDynamicUp()
+{
+	Matrix matRot = XMMatrixIdentity();
+	matRot = XMMatrixRotationX(m_vRelativeRot.x);
+	matRot *= XMMatrixRotationY(m_vRelativeRot.y);
+	matRot *= XMMatrixRotationZ(m_vRelativeRot.z);
+
+	Vec3 fUp = Vec3::TransformNormal(Vec3::Up, matRot);
+
+	return fUp;
+}
 
 void CTransform::finaltick()
 {

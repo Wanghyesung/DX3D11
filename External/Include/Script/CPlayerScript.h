@@ -20,9 +20,12 @@ public:
     void SetActive(bool _bActive){}
 
     void SetFSM(CFSM* _pFSM);
+    void Initialize();
 private:
     void Shoot();
 
+    void set_attack();
+    void rotate();
 public:
     virtual void SaveToLevelFile(FILE* _File) override;
     virtual void LoadFromLevelFile(FILE* _FILE) override;

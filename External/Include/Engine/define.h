@@ -254,6 +254,7 @@ enum class STATE_TYPE
 	IDLE,
 	WALK,
 	RUN,
+	ROLL,
 	ATTACK,
 	JUMP,
 	END,

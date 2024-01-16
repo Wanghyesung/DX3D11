@@ -205,6 +205,15 @@
     <ClInclude Include="CRunState.h">
       <Filter>Source\09. Module\FSM</Filter>
     </ClInclude>
+    <ClInclude Include="CRollState.h">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CAttackState.h">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CJumpState.h">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -402,6 +411,15 @@
     <ClCompile Include="CRunState.cpp">
       <Filter>Source\09. Module\FSM</Filter>
     </ClCompile>
+    <ClCompile Include="CRollState.cpp">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CAttackState.cpp">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CJumpState.cpp">
+      <Filter>Source\09. Module\FSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -565,6 +583,9 @@
     </Filter>
     <Filter Include="Source\09. Module\FSM">
       <UniqueIdentifier>{34a1bc0e-becf-472e-acf8-f2a95e5f307a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\09. Module\FSM\NewFilter1">
+      <UniqueIdentifier>{7918d4b4-e0d4-4432-976a-600dbab8d7b8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

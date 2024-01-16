@@ -87,20 +87,35 @@ void CCameraMoveScript::Camera3DMove()
 
 void CCameraMoveScript::move_target()
 {
-	Vec3 vRot = Transform()->GetRelativeRot();
-	Vec2 vMouseDir = CKeyMgr::GetInst()->GetMouseDir();
-	vRot.y += (DT/2.f * vMouseDir.x);
-	vRot.x = 0.f;
+	//Vec3 vRot = Transform()->GetRelativeRot();
+	//Vec2 vMouseDir = CKeyMgr::GetInst()->GetMouseDir();
+	//vRot.y += (DT/2.f * vMouseDir.x);
+	//
+	//Vec3 vNewRot = {};
+	//vNewRot.y = vRot.y;
+	//vNewRot.x = -XM_PI / 2.f;
+	//
+	////player
+	//m_pTarget->Transform()->SetRelativeRot(vNewRot);
+	Vec3 vTargetFoword = m_pTarget->Transform()->GetDynamicUp();
+	
+	//foward -> z축 y축 반전
+	//up->y축 z축 반전 - 1
+	//forardvector -> upvector
 
-	//player
-	m_pTarget->Transform()->SetRelativeRot(vRot);
-	Vec3 vTargetFoword = m_pTarget->Transform()->GetNewFoward();
+	//Vec3 vNewTargetFoword = {};
+	//vNewTargetFoword.x = vTargetFoword.x;
+	//vNewTargetFoword.y = -vTargetFoword.z;
+	//vNewTargetFoword.z = vTargetFoword.y;
 
+	Vec3 vTargetRot = m_pTarget->Transform()->GetRelativeRot();
 
 	//camera
+	Vec3 vRot = Transform()->GetRelativeRot();
 	vRot.x = XM_PI / 10.f;
-	vTargetFoword *= -1;
-	float fMaxDistance = 2000.f;
+	vRot.y = vTargetRot.y;
+	//vTargetFoword *= -1;
+	float fMaxDistance = 1000.f;
 	vTargetFoword *= fMaxDistance;
 
 	Vec3 vTargetPos = m_pTarget->Transform()->GetRelativePos();
@@ -108,7 +123,7 @@ void CCameraMoveScript::move_target()
 	vFinalPos.y += 500.f;
 
 	Transform()->SetRelativeRot(vRot);
-	GlobalData.CameraRot = vRot;
+	//GlobalData.CameraRot = vRot;
 	Transform()->SetRelativePos(vFinalPos);
 }
 

@@ -110,6 +110,9 @@ PS_OUT PS_Std3D_Deferred(VS_OUT _in)
         // 0 ~ 1 범위의 값을 -1 ~ 1 로 확장        
         vNormal = vNormal * 2.f - 1.f;
         
+        //foward -> z축 y축 반전
+        //up -> z축 y축 반전 *=-1
+        
         float3x3 vRotateMat =
         {
             _in.vViewTangent,

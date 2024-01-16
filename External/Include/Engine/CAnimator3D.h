@@ -95,6 +95,7 @@ public:
     void Play(const std::wstring& _strName, bool _bRepeat);
     void Stop(bool _bStop) { m_bStop = _bStop; }
 
+    CAnimation3D* GetCurAnim() { return m_pCurAnimation; }
     //animation event
     std::function<void()>& StartEvent(const std::wstring _strKey);
     std::function<void()>& CompleteEvent(const std::wstring _strKey);
